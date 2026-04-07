@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery — Wise Up Foundation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #D32F2F; --green: #388E3C; --dark: #1A1A1A;
+      --light: #F5F9F5; --white: #FFFFFF; --accent-green: #2E7D32;
+      --gray: #6B7280; --border: #E5E7EB;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 5%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .logo-icon { width: 44px; height: 44px; background: var(--light); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-text span:first-child { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--dark); display: block; line-height: 1.1; }
+    .logo-text span:last-child { font-size: 0.62rem; color: var(--accent-green); letter-spacing: 0.06em; font-weight: 500; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--dark); font-size: 0.875rem; font-weight: 500; padding: 0.5rem 0.9rem; border-radius: 8px; transition: background 0.2s, color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { background: var(--light); color: var(--accent-green); }
+    .nav-cta { background: var(--accent-green) !important; color: var(--white) !important; padding: 0.5rem 1.2rem !important; border-radius: 8px; }
+    .nav-cta:hover { background: #1B5E20 !important; color: white !important; }
+    @media(max-width:600px){ .nav-links { display:none; } }
+
+    /* PAGE HERO */
+    .page-hero { padding: 9rem 5% 5rem; background: linear-gradient(160deg, #1A1A1A 0%, #2A2A2A 55%, #1B3A1B 100%); position: relative; overflow: hidden; }
+    .page-hero::before { content:''; position:absolute; top:-120px; right:-80px; width:450px; height:450px; border-radius:50%; background:radial-gradient(circle, rgba(56,142,60,0.18) 0%, transparent 65%); }
+    .hero-inner { position: relative; z-index: 1; max-width: 680px; }
+    .breadcrumb { display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; color:rgba(255,255,255,0.4); margin-bottom:1.5rem; }
+    .breadcrumb a { color:rgba(255,255,255,0.4); text-decoration:none; }
+    .breadcrumb a:hover { color:#81C784; }
+    .page-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#81C784; display:block; margin-bottom:1rem; }
+    .page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,5vw,3.5rem); font-weight:900; color:white; line-height:1.15; margin-bottom:1.25rem; }
+    .page-hero h1 em { font-style:italic; color:#81C784; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,0.5); line-height:1.8; max-width:520px; }
+
+    /* FILTER */
+    .filter-bar { position:sticky; top:68px; z-index:50; background:white; border-bottom:1px solid var(--border); padding:0 5%; }
+    .filter-inner { display:flex; align-items:center; gap:0.25rem; overflow-x:auto; padding:0.75rem 0; scrollbar-width:none; }
+    .filter-inner::-webkit-scrollbar { display:none; }
+    .filter-btn { white-space:nowrap; padding:0.45rem 1.1rem; border-radius:100px; border:1px solid var(--border); font-size:0.8rem; font-weight:500; background:white; color:var(--gray); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+    .filter-btn:hover { border-color:var(--accent-green); color:var(--accent-green); }
+    .filter-btn.active { background:var(--dark); color:white; border-color:var(--dark); }
+
+    /* GALLERY GRID */
+    .gallery-wrap { padding: 3.5rem 5% 6rem; }
+    .gallery-section { margin-bottom: 4rem; }
+    .gallery-section-label {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .gsec-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); }
+    .gsec-line { flex:1; height:1px; background:var(--border); }
+    .gsec-count { font-size:0.72rem; color:var(--gray); font-weight:500; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    /* Photo card */
+    .photo-card {
+      border-radius: 16px; overflow: hidden;
+      position: relative; aspect-ratio: 4/3;
+      background: var(--light);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .photo-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
+
+    /* Placeholder state */
+    .photo-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.75rem;
+      border: 2px dashed #CBD5E1;
+      border-radius: 15px;
+      color: #94A3B8;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .photo-card:hover .photo-placeholder { border-color: var(--accent-green); background: #F0FDF4; color: var(--accent-green); }
+    .photo-placeholder svg { width: 32px; height: 32px; }
+    .photo-placeholder span { font-size: 0.75rem; font-weight: 600; text-align: center; line-height: 1.5; }
+
+    /* Image state (when photo is added) */
+    .photo-card img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .photo-card:hover img { transform: scale(1.04); }
+
+    /* Overlay on hover */
+    .photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.75) 100%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 1.25rem;
+    }
+    .photo-card:hover .photo-overlay { opacity: 1; }
+    .photo-overlay .p-title { font-weight: 700; font-size: 0.9rem; color: white; margin-bottom: 0.2rem; }
+    .photo-overlay .p-date { font-size: 0.72rem; color: rgba(255,255,255,0.65); }
+
+    /* Event badge on card */
+    .photo-badge {
+      position: absolute; top: 0.75rem; left: 0.75rem;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+      color: white; font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.06em; padding: 0.25rem 0.6rem;
+      border-radius: 100px; text-transform: uppercase;
+    }
+
+    /* Featured wide card (first of each section) */
+    .photo-card.wide { grid-column: span 2; aspect-ratio: 16/7; }
+
+    /* Lightbox */
+    .lightbox { display:none; position:fixed; inset:0; z-index:999; background:rgba(0,0,0,0.92); align-items:center; justify-content:center; flex-direction:column; padding:2rem; }
+    .lightbox.open { display:flex; }
+    .lightbox img { max-width:90vw; max-height:80vh; border-radius:12px; object-fit:contain; }
+    .lightbox-close { position:absolute; top:1.5rem; right:2rem; color:white; font-size:1.5rem; cursor:pointer; background:rgba(255,255,255,0.1); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background 0.2s; border:none; }
+    .lightbox-close:hover { background:rgba(255,255,255,0.2); }
+    .lightbox-caption { color:rgba(255,255,255,0.6); font-size:0.85rem; margin-top:1rem; text-align:center; }
+
+    /* CTA */
+    .gallery-cta { text-align:center; padding:4rem 5%; background:var(--light); }
+    .gallery-cta h2 { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,3vw,2rem); font-weight:900; margin-bottom:0.75rem; }
+    .gallery-cta h2 em { font-style:normal; color:var(--accent-green); }
+    .gallery-cta p { color:var(--gray); font-size:0.9rem; max-width:440px; margin:0 auto 2rem; line-height:1.7; }
+    .btn-primary { display:inline-flex; align-items:center; gap:0.5rem; background:var(--accent-green); color:white; text-decoration:none; font-weight:600; font-size:0.9rem; padding:0.85rem 1.8rem; border-radius:12px; transition:all 0.2s; box-shadow:0 4px 16px rgba(46,125,50,0.3); }
+    .btn-primary:hover { background:#1B5E20; transform:translateY(-2px); }
+
+    footer { background:#111; color:white; padding:3rem 5% 1.5rem; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border-top:1px solid rgba(255,255,255,0.07); padding-top:1.5rem; }
+    .footer-bottom p { font-size:0.78rem; color:rgba(255,255,255,0.3); }
+    .footer-nav { display:flex; gap:1.5rem; }
+    .footer-nav a { font-size:0.78rem; color:rgba(255,255,255,0.3); text-decoration:none; transition:color 0.2s; }
+    .footer-nav a:hover { color:#81C784; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { opacity:0; }
+    .fade-in.visible { animation:fadeUp 0.5s ease both; }
+
+    @media(max-width:768px){
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .photo-card.wide { grid-column: span 2; }
+    }
+    @media(max-width:480px){
+      .gallery-grid { grid-template-columns: 1fr; }
+      .photo-card.wide { grid-column: span 1; aspect-ratio: 4/3; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 60 60" width="30" height="30" fill="none">
+        <circle cx="30" cy="10" r="6" fill="#1A1A1A"/>
+        <path d="M30 18 Q18 28 14 42" stroke="#D32F2F" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M30 18 Q42 28 46 42" stroke="#388E3C" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M22 16 Q30 22 38 16" stroke="#90CAF9" stroke-width="6" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span>Wise Up Foundation</span>
+      <span>...inspiring positive change</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="getinvolved.html">Get Involved</a></li>
+    <li><a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" class="nav-cta">Donate</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span style="color:rgba(255,255,255,0.7)">Gallery</span></div>
+    <div class="page-tag">GALLERY</div>
+    <h1>Moments of <em>Impact</em><br/>in Pictures</h1>
+    <p>A visual record of our programs, partnerships, and the people whose lives we've touched — from school visits to community outreach and everything in between.</p>
+  </div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active">All Photos</button>
+    <!-- <button class="filter-btn">Girl Child Day</button>
+    <button class="filter-btn">Empower Young Minds</button>
+    <button class="filter-btn">Children's Day</button>
+    <button class="filter-btn">Drug Awareness</button>
+    <button class="filter-btn">Skill Acquisition</button>
+    <button class="filter-btn">Team & Events</button> -->
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery-wrap">
+
+    <!-- Section: Logo -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">Wise Up Foundation Logo</span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    
+        <div class="photo-badge">Logo</div>
+        <div class="photo-overlay"><div class="p-title">Logo</div><div class="p-date"></div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/wise up pirofile pic_Facebook Profile Pic.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Logo</div><div class="p-date"> </div></div>
+      </div>
+     
+     
+    </div>
+  </div>
+
+
+
+
+  <!-- Section: Girl Child Day 2024 -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">International Day of the Girl Child · Oct 2024</span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    <div class="gallery-grid">
+      <!-- Wide featured card -->
+      <!-- <div class="photo-card wide">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>Add featured photo<br/>(wide format recommended)</span>
+        </div> -->
+        <div class="photo-badge">Girl Child Day 2024</div>
+        <div class="photo-overlay"><div class="p-title">International Day of the Girl Child</div><div class="p-date">October 11, 2024 · Lite Art Foundation Partnership</div></div>
+      </div>
+      <!-- 1 tall card -->
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20241011_124253.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Girl Child Empowerment Session</div><div class="p-date">October 2024</div></div>
+      </div>
+      <!-- Row of 3 -->
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20241011_123455.jpg" alt="">o</span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Resource Distribution</div><div class="p-date">October 2024</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20241011_124323.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Team with Beneficiaries</div><div class="p-date">October 2024</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20241011_103246.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">School Visit</div><div class="p-date">October 2024</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Empower 1.0 -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">Empower Young Minds 1.0 · March 2025</span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    <div class="gallery-grid">
+      <div class="photo-card wide">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/IMG_3299.jpg" alt=""></span>
+        </div>
+        <div class="photo-badge">Empower 1.0</div>
+        <div class="photo-overlay"><div class="p-title">Empower Young Minds 1.0</div><div class="p-date">March 12, 2025 · Maiden Edition</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250312_100023.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">School Outreach</div><div class="p-date">March 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250312_094749.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Stationery Distribution</div><div class="p-date">March 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250312_094907.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Student Engagement</div><div class="p-date">March 2025</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Children's Day -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">Children's Day · May 2025</span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    <div class="gallery-grid">
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250527_100119.jpg" alt=""></span>
+        </div>
+        <div class="photo-badge">Children's Day</div>
+        <div class="photo-overlay"><div class="p-title">Children's Day Celebration</div><div class="p-date">May 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250527_125848.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Community Celebration</div><div class="p-date">May 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250527_125029.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Partnership with Lite Art</div><div class="p-date">May 2025</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Drug Awareness -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">Drug Awareness Program · June 2025</span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    <div class="gallery-grid">
+      <div class="photo-card wide">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250624_145004.jpg" alt=""></span>
+        </div>
+        <div class="photo-badge">Drug Awareness</div>
+        <div class="photo-overlay"><div class="p-title">Drug Awareness Campaign</div><div class="p-date">June 23–26, 2025 · Drug Free Project Partnership</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250626_092225.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Advocacy Session</div><div class="p-date">June 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250626_124900.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Team with Drug Free Project</div><div class="p-date">June 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250624_142218.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Community Outreach</div><div class="p-date">June 2025</div></div>
+      </div>
+    </div>
+  </div>
+
+<!-- Section: International Girls Day 2025 -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">International Girls Day · October 2025</span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    <div class="gallery-grid">
+      <div class="photo-card wide">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/1760717084809.jpg" alt=""></span>
+        </div>
+        <div class="photo-badge">Girls Day</div>
+        <div class="photo-overlay"><div class="p-title">Opening session</div><div class="p-date">October 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/1760716349419.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Menstrual health Session</div><div class="p-date">October 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/1760716642641.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">With the students</div><div class="p-date">October 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/1760716857101.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Team members</div><div class="p-date">October 2025</div></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Section: Empower 2.0  -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">Empower Young Minds 2.0 </span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    <div class="gallery-grid">
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/1773235140089.jpg" alt=""></span>
+        </div>
+        <div class="photo-badge">Empower 2.0</div>
+        <div class="photo-overlay"><div class="p-title">Empower Young Minds 2.0</div><div class="p-date">March 2026</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/1773235277401.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">School Program</div><div class="p-date">March 2026</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/Snapchat-49455825.jpg" alt=""></span>
+        </div>
+        <div class="photo-badge">Skills</div>
+        <div class="photo-overlay"><div class="p-title">Empower young minds 2.0</div><div class="p-date">March 2026</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/1773234856174.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">With the students</div><div class="p-date">March 2026</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/Snapchat-1159489013.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Team members</div><div class="p-date">March 2026</div></div>
+      </div>
+      <!-- <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>Add photo</span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Participants & Team</div><div class="p-date">March 2026</div></div>
+      </div> -->
+    </div>
+  </div>
+
+  <!-- Section: Team Hangout -->
+  <div class="gallery-section fade-in">
+    <div class="gallery-section-label">
+      <span class="gsec-tag">Team members Hangout · 2025</span>
+      <div class="gsec-line"></div>
+      <span class="gsec-count"></span>
+    </div>
+    <div class="gallery-grid">
+      <div class="photo-card wide">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250809_151630.jpg" alt=""></span>
+        </div>
+        <div class="photo-badge">Hangout</div>
+        <div class="photo-overlay"><div class="p-title">Hangout</div><div class="p-date"> 2025 </div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250809_172857.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Team members</div><div class="p-date"> 2025</div></div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250809_154145.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Hangout</div><div class="p-date"> 2025</div></div>
+      </div>
+      <!-- <div class="photo-card">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span><img src="gallery wise up/20250624_142218.jpg" alt=""></span>
+        </div>
+        <div class="photo-overlay"><div class="p-title">Community Outreach</div><div class="p-date">June 2025</div></div>
+      </div> -->
+    </div>
+  </div>
+
+
+</div>
+
+<!-- CTA -->
+<section class="gallery-cta">
+  <h2>Be Part of Our Next <em>Chapter</em></h2>
+  <p>Want to see your community in these photos? Join us as a volunteer or partner to be part of future programs.</p>
+  <a href="getinvolved.html" class="btn-primary">Get Involved →</a>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025–2026 Wise Up Foundation · All rights reserved</p>
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <a href="gallery.html">Gallery</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Scroll animations
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => {
+      if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'), i*80); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // Lightbox for real images
+  document.querySelectorAll('.photo-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const img = card.querySelector('img');
+      if (!img) return;
+      const title = card.querySelector('.p-title')?.textContent || '';
+      const date = card.querySelector('.p-date')?.textContent || '';
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox-caption').textContent = `${title} — ${date}`;
+      document.getElementById('lightbox').classList.add('open');
+    });
+  });
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>

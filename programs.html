@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Programs — Wise Up Foundation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #D32F2F;
+      --green: #388E3C;
+      --blue: #90CAF9;
+      --dark: #1A1A1A;
+      --light: #F5F9F5;
+      --white: #FFFFFF;
+      --accent-green: #2E7D32;
+      --accent-red: #C62828;
+      --gray: #6B7280;
+      --border: #E5E7EB;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 5%;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .logo-icon { width: 44px; height: 44px; background: var(--light); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-text span:first-child { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--dark); display: block; line-height: 1.1; }
+    .logo-text span:last-child { font-size: 0.62rem; color: var(--accent-green); letter-spacing: 0.06em; font-weight: 500; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--dark); font-size: 0.875rem; font-weight: 500; padding: 0.5rem 0.9rem; border-radius: 8px; transition: background 0.2s, color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { background: var(--light); color: var(--accent-green); }
+    .nav-cta { background: var(--accent-green) !important; color: var(--white) !important; padding: 0.5rem 1.2rem !important; }
+    .nav-cta:hover { background: #1B5E20 !important; color: white !important; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 9rem 5% 5rem;
+      background: linear-gradient(160deg, #1A1A1A 0%, #2E2E2E 60%, #1B3A1B 100%);
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; top: -150px; right: -100px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,142,60,0.2) 0%, transparent 65%);
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute; bottom: -100px; left: 10%;
+      width: 350px; height: 350px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(211,47,47,0.12) 0%, transparent 65%);
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 700px; }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.78rem; color: rgba(255,255,255,0.4);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: rgba(255,255,255,0.4); text-decoration: none; }
+    .breadcrumb a:hover { color: #81C784; }
+    .breadcrumb span { color: rgba(255,255,255,0.6); }
+    .page-tag {
+      display: inline-block; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #81C784; margin-bottom: 1rem;
+    }
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 900; color: white; line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+    .page-hero h1 em { font-style: italic; color: #81C784; }
+    .page-hero p { font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 560px; }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem; margin-top: 3rem; flex-wrap: wrap;
+    }
+    .hstat { border-left: 3px solid rgba(255,255,255,0.1); padding-left: 1.25rem; }
+    .hstat .n { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: white; }
+    .hstat .n sup { font-size: 1rem; color: #81C784; }
+    .hstat .l { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    /* ── FILTER TABS ── */
+    .filter-bar {
+      position: sticky; top: 68px; z-index: 50;
+      background: white; border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+    }
+    .filter-inner {
+      display: flex; align-items: center; gap: 0.25rem;
+      overflow-x: auto; padding: 0.75rem 0;
+      scrollbar-width: none;
+    }
+    .filter-inner::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      white-space: nowrap; padding: 0.45rem 1.1rem;
+      border-radius: 100px; border: 1px solid var(--border);
+      font-size: 0.8rem; font-weight: 500;
+      background: white; color: var(--gray);
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .filter-btn:hover { border-color: var(--accent-green); color: var(--accent-green); }
+    .filter-btn.active { background: var(--dark); color: white; border-color: var(--dark); }
+
+    /* ── PROGRAMS MAIN ── */
+    .programs-wrap { padding: 4rem 5% 6rem; }
+
+    /* Featured program */
+    .featured-label {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+    .featured-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* Program cards grid */
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* Large featured card */
+    .prog-card {
+      border-radius: 24px; overflow: hidden;
+      border: 1px solid var(--border);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex; flex-direction: column;
+      background: white;
+      cursor: pointer;
+    }
+    .prog-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); border-color: transparent; }
+
+    .prog-card.span-8 { grid-column: span 8; }
+    .prog-card.span-4 { grid-column: span 4; }
+    .prog-card.span-6 { grid-column: span 6; }
+    .prog-card.span-4-mid { grid-column: span 4; }
+
+    .card-visual {
+      height: 220px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .prog-card.span-8 .card-visual { height: 280px; }
+
+    /* Pattern backgrounds per program */
+    .bg-girlchild {
+      background: linear-gradient(135deg, #880E4F 0%, #C2185B 50%, #E91E63 100%);
+    }
+    .bg-empower {
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #43A047 100%);
+    }
+    .bg-childrens {
+      background: linear-gradient(135deg, #E65100 0%, #F57C00 50%, #FF9800 100%);
+    }
+    .bg-drug {
+      background: linear-gradient(135deg, #0D47A1 0%, #1565C0 50%, #1976D2 100%);
+    }
+    .bg-girlchild2 {
+      background: linear-gradient(135deg, #4A148C 0%, #6A1B9A 50%, #8E24AA 100%);
+    }
+    .bg-empower2 {
+      background: linear-gradient(135deg, #004D40 0%, #00695C 50%, #00897B 100%);
+    }
+    .bg-skill {
+      background: linear-gradient(135deg, #BF360C 0%, #D84315 50%, #E64A19 100%);
+    }
+    .bg-community {
+      background: linear-gradient(135deg, #1A237E 0%, #283593 50%, #3949AB 100%);
+    }
+
+    .card-pattern {
+      position: absolute; inset: 0; opacity: 0.08;
+      background-image: radial-gradient(circle, white 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .card-icon-big {
+      font-size: 4.5rem; position: relative; z-index: 1;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.2));
+    }
+    .prog-card.span-8 .card-icon-big { font-size: 6rem; }
+    .card-year-badge {
+      position: absolute; top: 1rem; left: 1rem;
+      background: rgba(0,0,0,0.3); backdrop-filter: blur(8px);
+      color: white; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.06em; padding: 0.35rem 0.8rem;
+      border-radius: 100px;
+    }
+    .card-partner-badge {
+      position: absolute; bottom: 1rem; right: 1rem;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+      color: white; font-size: 0.65rem; font-weight: 600;
+      padding: 0.3rem 0.75rem; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .new-badge {
+      position: absolute; top: 1rem; right: 1rem;
+      background: #FFD600; color: #1A1A1A;
+      font-size: 0.6rem; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 0.6rem; }
+    .prog-card.span-8 .card-body { padding: 2rem; }
+    .card-meta {
+      display: flex; align-items: center; gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .card-date { font-size: 0.72rem; font-weight: 600; color: var(--gray); }
+    .card-tag {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+    }
+    .tag-gender { background: #FCE4EC; color: #880E4F; }
+    .tag-education { background: #E8F5E9; color: #1B5E20; }
+    .tag-health { background: #E3F2FD; color: #0D47A1; }
+    .tag-community { background: #EDE7F6; color: #4A148C; }
+    .tag-skills { background: #FBE9E7; color: #BF360C; }
+
+    .card-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--dark);
+      line-height: 1.3;
+    }
+    .prog-card.span-8 .card-body h3 { font-size: 1.5rem; }
+    .card-body p { font-size: 0.83rem; color: var(--gray); line-height: 1.65; flex: 1; }
+    .prog-card.span-8 .card-body p { font-size: 0.9rem; }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 0.75rem; padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .card-reach { font-size: 0.75rem; color: var(--gray); }
+    .card-reach strong { color: var(--dark); font-weight: 700; }
+    .card-arrow {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--light); display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+      font-size: 0.8rem;
+    }
+    .prog-card:hover .card-arrow { background: var(--accent-green); color: white; transform: rotate(-45deg); }
+
+    /* ── COMMUNITY SECTION ── */
+    .community-section {
+      margin-top: 2rem;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #1A1A1A 0%, #1B3A1B 100%);
+      padding: 3rem;
+      position: relative; overflow: hidden;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: center;
+    }
+    .community-section::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,142,60,0.15) 0%, transparent 65%);
+    }
+    .community-section::after {
+      content: '💬';
+      position: absolute; right: 8%; top: 50%; transform: translateY(-50%);
+      font-size: 10rem; opacity: 0.05;
+    }
+    .comm-content { position: relative; z-index: 1; }
+    .comm-tag { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #81C784; margin-bottom: 1rem; display: block; }
+    .comm-content h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem; font-weight: 900; color: white; line-height: 1.2; margin-bottom: 1rem;
+    }
+    .comm-content h2 em { font-style: italic; color: #81C784; }
+    .comm-content p { font-size: 0.9rem; color: rgba(255,255,255,0.55); line-height: 1.75; margin-bottom: 1.75rem; }
+    .comm-features { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+    .comm-feat {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.85rem; color: rgba(255,255,255,0.7);
+    }
+    .comm-feat-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: rgba(129,196,132,0.15); color: #81C784;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; flex-shrink: 0;
+    }
+    .btn-comm {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #25D366; color: white;
+      text-decoration: none; font-weight: 600; font-size: 0.875rem;
+      padding: 0.85rem 1.8rem; border-radius: 12px;
+      transition: all 0.2s; box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+    }
+    .btn-comm:hover { background: #128C7E; transform: translateY(-2px); }
+
+    .comm-stats { position: relative; z-index: 1; }
+    .comm-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .comm-stat-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 1.5rem; text-align: center;
+      transition: background 0.2s;
+    }
+    .comm-stat-card:hover { background: rgba(255,255,255,0.09); }
+    .comm-stat-card .cn {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 900; color: white; display: block;
+    }
+    .comm-stat-card .cn sup { font-size: 1.1rem; color: #81C784; }
+    .comm-stat-card .cl { font-size: 0.72rem; color: rgba(255,255,255,0.4); margin-top: 4px; }
+    .comm-stat-card.wide { grid-column: span 2; }
+
+    /* ── UPCOMING ── */
+    .upcoming-section { padding: 5rem 5%; background: var(--light); }
+    .upcoming-section .section-tag {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent-green); display: block; margin-bottom: 0.75rem;
+    }
+    .upcoming-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+    .upcoming-section h2 em { font-style: normal; color: var(--accent-green); }
+    .upcoming-section > p { color: var(--gray); font-size: 0.9rem; margin-bottom: 2.5rem; line-height: 1.7; }
+    .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .upcoming-card {
+      background: white; border-radius: 16px; padding: 1.5rem;
+      border: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 1.25rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .upcoming-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+    .upcoming-dot {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .upcoming-dot.g { background: #E8F5E9; }
+    .upcoming-dot.r { background: #FFEBEE; }
+    .upcoming-dot.b { background: #E3F2FD; }
+    .upcoming-info h4 { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem; line-height: 1.4; }
+    .upcoming-info .ud { font-size: 0.72rem; color: var(--accent-green); font-weight: 600; }
+
+    /* ── CTA ── */
+    .cta-strip {
+      padding: 5rem 5%;
+      background: var(--dark); text-align: center;
+    }
+    .cta-strip h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.5rem); color: white; font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    .cta-strip h2 em { font-style: normal; color: #81C784; }
+    .cta-strip p { color: rgba(255,255,255,0.45); font-size: 0.95rem; max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .cta-btns { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-green); color: white; text-decoration: none; font-weight: 600; font-size: 0.9rem; padding: 0.85rem 1.8rem; border-radius: 12px; transition: all 0.2s; box-shadow: 0 4px 16px rgba(46,125,50,0.3); }
+    .btn-primary:hover { background: #1B5E20; transform: translateY(-2px); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500; font-size: 0.9rem; padding: 0.85rem 1.6rem; border-radius: 12px; transition: all 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); color: white; }
+
+    /* ── FOOTER ── */
+    footer { background: #111; color: white; padding: 3rem 5% 1.5rem; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1.5rem; }
+    .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-nav { display: flex; gap: 1.5rem; }
+    .footer-nav a { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+    .footer-nav a:hover { color: #81C784; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { opacity: 0; }
+    .fade-in.visible { animation: fadeUp 0.55s ease both; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .prog-card.span-8 { grid-column: span 12; }
+      .prog-card.span-4 { grid-column: span 12; }
+      .prog-card.span-6 { grid-column: span 12; }
+      .prog-card.span-4-mid { grid-column: span 12; }
+      .community-section { grid-template-columns: 1fr; }
+      .community-section::after { display: none; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 60 60" width="30" height="30" fill="none">
+        <circle cx="30" cy="10" r="6" fill="#1A1A1A"/>
+        <path d="M30 18 Q18 28 14 42" stroke="#D32F2F" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M30 18 Q42 28 46 42" stroke="#388E3C" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M22 16 Q30 22 38 16" stroke="#90CAF9" stroke-width="6" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span>Wise Up Foundation</span>
+      <span>...inspiring positive change</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html" class="active">Programs</a></li>
+    <!-- <li><a href="#">Impact</a></li> -->
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="getinvolved.html">Get Involved</a></li>
+    <li><a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" class="nav-cta">Donate</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <span>›</span>
+      <span style="color:rgba(255,255,255,0.7)">Programs</span>
+    </div>
+    <div class="page-tag">OUR PROGRAMS & PROJECTS</div>
+    <h1>Where <em>Action</em> Meets<br/>Purpose</h1>
+    <p>From girl child empowerment to skill acquisition, every program we run is rooted in our commitment to education, equality, and community growth aligned with UN SDGs 4, 8, and 10.</p>
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="n">7<sup>+</sup></div>
+        <div class="l">Programs Delivered</div>
+      </div>
+      <div class="hstat">
+        <div class="n">300<sup>+</sup></div>
+        <div class="l">Lives Reached</div>
+      </div>
+      <div class="hstat">
+        <div class="n">5</div>
+        <div class="l">Partner Organizations</div>
+      </div>
+      <div class="hstat">
+        <div class="n">2024</div>
+        <div class="l">Year Founded</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" onclick="filterCards('all', this)">All Programs</button>
+    <button class="filter-btn" onclick="filterCards('gender', this)">Girl Child & Gender</button>
+    <button class="filter-btn" onclick="filterCards('education', this)">Education</button>
+    <button class="filter-btn" onclick="filterCards('health', this)">Health & Wellness</button>
+    <button class="filter-btn" onclick="filterCards('skills', this)">Skills & Career</button>
+    <button class="filter-btn" onclick="filterCards('community', this)">Community</button>
+  </div>
+</div>
+
+<!-- PROGRAMS -->
+<div class="programs-wrap">
+
+  <div class="featured-label">FLAGSHIP PROGRAMS</div>
+
+  <div class="programs-grid" id="programs-grid">
+
+    <!-- 1. Girl Child Day 2024 — LARGE -->
+    <div class="prog-card span-8 fade-in" data-category="gender">
+      <div class="card-visual bg-girlchild">
+        <div class="card-pattern"></div>
+        <div class="card-icon-big">👧🏾</div>
+        <div class="card-year-badge">OCT 11, 2024</div>
+        <div class="card-partner-badge">✦ Lite Art Foundation</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-date">October 11, 2024</span>
+          <span class="card-tag tag-gender">Girl Child</span>
+          <span class="card-tag tag-education">Education</span>
+        </div>
+        <h3>International Day of the Girl Child</h3>
+        <p>In partnership with Lite Art Foundation, we visited a local school to celebrate and empower girls. The program included enlightening sessions on confidence, rights, and opportunities, alongside the provision of sanitary pads and essential resources to over 100 girls — reinforcing that every girl deserves to thrive.</p>
+        <div class="card-footer">
+          <div class="card-reach">Reached <strong>100+</strong> girls</div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Empower 1.0 — SMALL -->
+    <div class="prog-card span-4 fade-in" data-category="education">
+      <div class="card-visual bg-empower">
+        <div class="card-pattern"></div>
+        <div class="card-icon-big">📚</div>
+        <div class="card-year-badge">MAR 12, 2025</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-date">March 12, 2025</span>
+          <span class="card-tag tag-education">Education</span>
+        </div>
+        <h3>Empower Young Minds 1.0</h3>
+        <p>Maiden edition — visited a primary school to promote the importance of staying in school. Provided stationery materials and shared inspiring stories about education's power to transform lives.</p>
+        <div class="card-footer">
+          <div class="card-reach"><strong>Maiden</strong> edition</div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Children's Day -->
+    <div class="prog-card span-4-mid fade-in" data-category="community">
+      <div class="card-visual bg-childrens">
+        <div class="card-pattern"></div>
+        <div class="card-icon-big">🎉</div>
+        <div class="card-year-badge">MAY 2025</div>
+        <div class="card-partner-badge">✦ Lite Art Foundation</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-date">May 2025</span>
+          <span class="card-tag tag-community">Community</span>
+        </div>
+        <h3>Children's Day Celebration</h3>
+        <p>Partnered with Lite Art Foundation to celebrate children, bringing joy, gifts, and memorable experiences to young ones in our community.</p>
+        <div class="card-footer">
+          <div class="card-reach"><strong>Community</strong> impact</div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Drug Awareness -->
+    <div class="prog-card span-4-mid fade-in" data-category="health">
+      <div class="card-visual bg-drug">
+        <div class="card-pattern"></div>
+        <div class="card-icon-big">🛡️</div>
+        <div class="card-year-badge">JUN 23–26, 2025</div>
+        <div class="card-partner-badge">✦ Drug Free Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-date">June 23–26, 2025</span>
+          <span class="card-tag tag-health">Health</span>
+        </div>
+        <h3>Drug Awareness Program</h3>
+        <p>Collaborated with The Drug Free Project to advocate against substance abuse, equipping individuals with knowledge to make informed, healthy lifestyle choices.</p>
+        <div class="card-footer">
+          <div class="card-reach"><strong>4-day</strong> campaign</div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Girl Child 2025 -->
+    <div class="prog-card span-4-mid fade-in" data-category="gender">
+      <div class="card-visual bg-girlchild2">
+        <div class="card-pattern"></div>
+        <div class="card-icon-big">✨</div>
+        <div class="card-year-badge">OCT 2025</div>
+        <div class="new-badge">2025 ED.</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-date">October 2025</span>
+          <span class="card-tag tag-gender">Girl Child</span>
+        </div>
+        <h3>International Day of the Girl Child</h3>
+        <p>The 2025 edition continued our commitment to girl child empowerment — celebrating, educating, and equipping girls with the tools to shape their futures.</p>
+        <div class="card-footer">
+          <div class="card-reach"><strong>Annual</strong> initiative</div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Empower 2.0 — LARGE -->
+    <div class="prog-card span-8 fade-in" data-category="education">
+      <div class="card-visual bg-empower2">
+        <div class="card-pattern"></div>
+        <div class="card-icon-big">🚀</div>
+        <div class="card-year-badge">MAR 2026</div>
+        <div class="new-badge">LATEST</div>
+      </div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-date">March 2026</span>
+          <span class="card-tag tag-education">Education</span>
+          <span class="card-tag tag-community">Community</span>
+        </div>
+        <h3>Empower Young Minds 2.0</h3>
+        <p>Building on the success of the maiden edition, Empower Young Minds 2.0 expanded our educational outreach — reaching more schools, more students, and driving home the message that knowledge is the greatest tool for transformation. A bigger stage, a bolder vision, and even greater impact.</p>
+        <div class="card-footer">
+          <div class="card-reach"><strong>Expanded</strong> from 1.0</div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Skill Acquisition -->
+    <div class="prog-card span-12 fade-in" style="grid-column: span 12; flex-direction: row;" data-category="skills">
+      <div class="card-visual bg-skill" style="min-width: 300px; height: auto; flex-shrink: 0;">
+        <div class="card-pattern"></div>
+        <div class="card-icon-big">💻</div>
+        <div class="card-year-badge">MAR 2026</div>
+        <div class="new-badge">NEW</div>
+      </div>
+      <div class="card-body" style="padding: 2rem;">
+        <div class="card-meta">
+          <span class="card-date">March 2026</span>
+          <span class="card-tag tag-skills">Skills</span>
+          <span class="card-tag tag-education">Education</span>
+        </div>
+        <h3 style="font-size: 1.5rem;">Skill Acquisition Program</h3>
+        <p style="font-size: 0.92rem; max-width: 580px;">Empowering youth with in-demand digital and creative skills for the modern economy. This hands-on program covers website development, video editing, content creation, and more — giving participants real, marketable abilities to build careers and create opportunities aligned with SDG 8.</p>
+        <div style="display:flex; gap: 0.6rem; flex-wrap: wrap; margin: 1rem 0;">
+          <span style="background:#FBE9E7; color:#BF360C; font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:8px;">🌐 Web Development</span>
+          <span style="background:#FBE9E7; color:#BF360C; font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:8px;">🎬 Video Editing</span>
+          <span style="background:#FBE9E7; color:#BF360C; font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:8px;">✍️ Content Creation</span>
+          <span style="background:#FBE9E7; color:#BF360C; font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:8px;">✍️ Project Management</span>
+          <span style="background:#FBE9E7; color:#BF360C; font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:8px;">📱 Graphics Design</span>
+          <span style="background:#FBE9E7; color:#BF360C; font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:8px;">📱 Social Media Management</span>
+          <span style="background:#FBE9E7; color:#BF360C; font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:8px;">📱 UI/UX</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-reach">Aligned with <strong>SDG 8</strong> — Decent Work & Economic Growth</div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMMUNITY SECTION -->
+  <div class="community-section" style="margin-top: 2.5rem;">
+    <div class="comm-content">
+      <span class="comm-tag">ONGOING PROJECT</span>
+      <h2>Our WhatsApp <em>Community</em></h2>
+      <p>An always-on space where minds meet, ideas spark, and real conversations happen. Our thriving WhatsApp community brings together youth, mentors, and change-makers for monthly discussions on what matters most.</p>
+      <div class="comm-features">
+        <div class="comm-feat"><div class="comm-feat-icon">🎙️</div> Expert speakers sharing insights on personal development</div>
+        <div class="comm-feat"><div class="comm-feat-icon">⚖️</div> Monthly discussions on gender equality and social issues</div>
+        <div class="comm-feat"><div class="comm-feat-icon">💼</div> Career development conversations and opportunities</div>
+        <div class="comm-feat"><div class="comm-feat-icon">🤝</div> A safe space for young people to connect and grow</div>
+      </div>
+      <a href="#" class="btn-comm">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Join Our Community
+      </a>
+    </div>
+    <div class="comm-stats">
+      <div class="comm-stat-grid">
+        <div class="comm-stat-card">
+          <span class="cn">100<sup>+</sup></span>
+          <span class="cl">Active Members</span>
+        </div>
+        <div class="comm-stat-card">
+          <span class="cn">12<sup>+</sup></span>
+          <span class="cl">Monthly Sessions</span>
+        </div>
+        <div class="comm-stat-card wide">
+          <span class="cn" style="font-size:1.6rem; color:#81C784;">Personal Development · Gender Equality · Career Growth · Social Issues</span>
+          <span class="cl" style="margin-top:8px; display:block;">Topics covered in our monthly discussions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<section class="cta-strip">
+  <h2>Want to Be Part of<br/>Our Next <em>Program</em>?</h2>
+  <p>Whether you want to volunteer, partner, or sponsor an initiative — we'd love to have you with us.</p>
+  <div class="cta-btns">
+    <a href="https://docs.google.com/forms/d/1PIs7VnGYy3I1Cjxnjzc3cNsSBQQkJmt1UP1pdbkKMD4/viewform" class="btn-primary">Volunteer Now →</a>
+    <a href="mailto:teamwiseupfoundation@gmail.com" class="btn-ghost">Partner With Us</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025–2026 Wise Up Foundation · All rights reserved</p>
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <!-- <a href="#">Contact</a> -->
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Scroll-triggered animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Filter
+  function filterCards(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.prog-card').forEach(card => {
+      const match = category === 'all' || card.dataset.category === category;
+      card.style.display = match ? 'flex' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

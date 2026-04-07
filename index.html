@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wise Up Foundation — Inspiring Positive Change</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #D32F2F;
+      --green: #388E3C;
+      --blue: #90CAF9;
+      --dark: #1A1A1A;
+      --light: #F5F9F5;
+      --white: #FFFFFF;
+      --accent-green: #2E7D32;
+      --accent-red: #C62828;
+      --gray: #6B7280;
+      --border: #E5E7EB;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 5%;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 48px; height: 48px;
+      background: var(--light);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .logo-icon svg { width: 36px; height: 36px; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text span:first-child {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--dark); line-height: 1.1;
+    }
+    .logo-text span:last-child {
+      font-size: 0.65rem; color: var(--accent-green);
+      letter-spacing: 0.06em; font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 0.25rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none; color: var(--dark);
+      font-size: 0.875rem; font-weight: 500;
+      padding: 0.5rem 0.9rem; border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-links a:hover { background: var(--light); color: var(--accent-green); }
+    .nav-cta {
+      background: var(--accent-green) !important;
+      color: var(--white) !important;
+      padding: 0.5rem 1.2rem !important;
+    }
+    .nav-cta:hover { background: #1B5E20 !important; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: 0.3s; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 5% 5rem;
+      gap: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #F5F9F5 0%, #E8F5E9 40%, #FAFAFA 100%);
+      z-index: 0;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,142,60,0.07) 0%, transparent 70%);
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute; bottom: -50px; left: 20%;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(211,47,47,0.05) 0%, transparent 70%);
+    }
+
+    .hero-content { position: relative; z-index: 1; animation: fadeUp 0.8s ease both; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: white; border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--accent-green);
+      letter-spacing: 0.04em;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .hero-badge span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); display: block; animation: pulse 2s infinite; }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+    }
+    h1 em { font-style: normal; color: var(--accent-green); }
+    h1 .underline-red {
+      position: relative; display: inline-block;
+    }
+    h1 .underline-red::after {
+      content: '';
+      position: absolute; bottom: 2px; left: 0; right: 0; height: 4px;
+      background: var(--red); border-radius: 2px; opacity: 0.7;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem; color: var(--gray);
+      line-height: 1.75; max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--accent-green); color: white;
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      padding: 0.85rem 1.8rem; border-radius: 12px;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 4px 16px rgba(46,125,50,0.3);
+    }
+    .btn-primary:hover { background: #1B5E20; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(46,125,50,0.35); }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 2px solid var(--dark); color: var(--dark);
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      padding: 0.85rem 1.6rem; border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { background: var(--dark); color: white; }
+
+    .hero-sdgs {
+      display: flex; gap: 0.75rem; margin-top: 2.5rem; flex-wrap: wrap;
+    }
+    .sdg-pill {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.85rem; border-radius: 100px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .sdg-pill.sdg4 { background: #E8F5E9; color: #2E7D32; }
+    .sdg-pill.sdg8 { background: #FFEBEE; color: #C62828; }
+    .sdg-pill.sdg10 { background: #E3F2FD; color: #1565C0; }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+    .hero-card-stack { position: relative; width: 360px; height: 420px; }
+
+    .stat-card {
+      position: absolute;
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+    .stat-card.main {
+      top: 0; left: 0; right: 0;
+      background: var(--dark);
+      color: white;
+      padding: 2rem;
+      border-radius: 24px;
+    }
+    .stat-card.main .tagline {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      line-height: 1.3; margin-bottom: 1.5rem;
+    }
+    .stat-card.main .tagline em { font-style: normal; color: #81C784; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stat-item .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 900; color: white;
+    }
+    .stat-item .num span { color: #81C784; }
+    .stat-item .label { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    .stat-card.float1 {
+      bottom: 60px; right: -30px;
+      width: 160px;
+      animation: float1 4s ease-in-out infinite;
+    }
+    .stat-card.float1 .f-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 900; color: var(--red);
+    }
+    .stat-card.float1 .f-label { font-size: 0.72rem; color: var(--gray); }
+
+    .stat-card.float2 {
+      bottom: -10px; left: -20px;
+      width: 160px;
+      animation: float2 5s ease-in-out infinite;
+    }
+    .stat-card.float2 .f-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 900; color: var(--accent-green);
+    }
+    .stat-card.float2 .f-label { font-size: 0.72rem; color: var(--gray); }
+
+    .founded-badge {
+      position: absolute; top: -16px; right: 30px;
+      background: var(--accent-green); color: white;
+      border-radius: 100px;
+      padding: 0.4rem 1rem; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.06em;
+      box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+    }
+
+    /* ── MISSION STRIP ── */
+    .mission-strip {
+      background: var(--dark);
+      padding: 3rem 5%;
+      display: flex; align-items: center;
+      gap: 3rem;
+      overflow: hidden;
+    }
+    .mission-strip .label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.4); text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .mission-strip .text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 700; color: white;
+      line-height: 1.4;
+    }
+    .mission-strip .text em { font-style: normal; color: #81C784; }
+    .mission-divider { width: 2px; height: 60px; background: rgba(255,255,255,0.15); flex-shrink: 0; }
+
+    /* ── PROGRAMS ── */
+    .section { padding: 6rem 5%; }
+    .section-header { margin-bottom: 3.5rem; }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent-green);
+      margin-bottom: 0.75rem;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900; color: var(--dark); line-height: 1.2;
+    }
+    h2 em { font-style: normal; color: var(--accent-green); }
+    .section-sub {
+      font-size: 1rem; color: var(--gray); margin-top: 0.75rem;
+      max-width: 560px; line-height: 1.7;
+    }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .program-card {
+      border-radius: 20px; padding: 2rem;
+      border: 1px solid var(--border);
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    .program-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      border-radius: 20px 20px 0 0;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .program-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); border-color: transparent; }
+    .program-card:hover::before { transform: scaleX(1); }
+
+    .program-card.green::before { background: var(--accent-green); }
+    .program-card.red::before { background: var(--red); }
+    .program-card.blue::before { background: #1565C0; }
+    .program-card.orange::before { background: #E65100; }
+    .program-card.purple::before { background: #6A1B9A; }
+
+    .prog-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 1.25rem;
+    }
+    .prog-icon.green { background: #E8F5E9; }
+    .prog-icon.red { background: #FFEBEE; }
+    .prog-icon.blue { background: #E3F2FD; }
+    .prog-icon.orange { background: #FFF3E0; }
+    .prog-icon.purple { background: #F3E5F5; }
+
+    .program-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem;
+    }
+    .program-card p { font-size: 0.875rem; color: var(--gray); line-height: 1.65; }
+
+    /* ── IMPACT ── */
+    .impact-section {
+      background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+      padding: 6rem 5%;
+      position: relative; overflow: hidden;
+    }
+    .impact-section::before {
+      content: '';
+      position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,142,60,0.15) 0%, transparent 60%);
+    }
+    .impact-section .section-tag { color: #81C784; }
+    .impact-section h2 { color: white; }
+    .impact-section .section-sub { color: rgba(255,255,255,0.5); }
+
+    .impact-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .impact-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 2rem;
+      text-align: center;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .impact-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-4px); }
+    .impact-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 900; color: white;
+      line-height: 1;
+    }
+    .impact-num sup { font-size: 1.5rem; color: #81C784; }
+    .impact-label { font-size: 0.82rem; color: rgba(255,255,255,0.5); margin-top: 0.5rem; line-height: 1.5; }
+
+    /* ── INITIATIVES ── */
+    .initiatives-section { padding: 6rem 5%; background: var(--light); }
+    .timeline { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 3rem; }
+    .timeline-item {
+      display: grid; grid-template-columns: 140px 1fr;
+      gap: 2rem; align-items: start;
+    }
+    .timeline-date {
+      text-align: right; padding-top: 0.2rem;
+    }
+    .timeline-date .month { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; color: var(--accent-green); text-transform: uppercase; }
+    .timeline-date .day { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--dark); line-height: 1; }
+    .timeline-date .year { font-size: 0.72rem; color: var(--gray); }
+    .timeline-body {
+      background: white; border-radius: 16px; padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent-green);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .timeline-body:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateX(4px); }
+    .timeline-body h4 { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; }
+    .timeline-body p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+    .timeline-body .partner {
+      display: inline-block; margin-top: 0.75rem;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+      color: var(--accent-green); background: #E8F5E9;
+      padding: 0.25rem 0.6rem; border-radius: 100px;
+    }
+
+    /* ── BELIEFS ── */
+    .beliefs-section { padding: 6rem 5%; }
+    .beliefs-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    .beliefs-content h2 { margin-bottom: 1rem; }
+    .belief-list { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+    .belief-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .belief-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: #E8F5E9; color: var(--accent-green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0; margin-top: 2px;
+    }
+    .belief-item h4 { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .belief-item p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+
+    .beliefs-visual {
+      background: var(--dark); border-radius: 28px;
+      padding: 2.5rem; color: white;
+    }
+    .quote-mark { font-family: 'Playfair Display', serif; font-size: 4rem; color: rgba(255,255,255,0.1); line-height: 0.5; margin-bottom: 1rem; }
+    .beliefs-visual blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700; line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+    .beliefs-visual blockquote em { font-style: normal; color: #81C784; }
+    .beliefs-visual .attr { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+
+    .sdg-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .sdg-badge {
+      border-radius: 12px; padding: 0.75rem 1rem; text-align: center;
+      flex: 1; min-width: 80px;
+    }
+    .sdg-badge .sdg-num { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; display: block; }
+    .sdg-badge .sdg-name { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.04em; }
+    .sdg-badge.g { background: rgba(56,142,60,0.15); color: #81C784; }
+    .sdg-badge.r { background: rgba(211,47,47,0.15); color: #EF9A9A; }
+    .sdg-badge.b { background: rgba(144,202,249,0.15); color: #90CAF9; }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 6rem 5%;
+      background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 50%, #E3F2FD 100%);
+      text-align: center;
+    }
+    .cta-section h2 { max-width: 600px; margin: 0 auto 1rem; }
+    .cta-section p { color: var(--gray); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .cta-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-red {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--red); color: white;
+      text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      padding: 0.85rem 1.8rem; border-radius: 12px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(211,47,47,0.3);
+    }
+    .btn-red:hover { background: var(--accent-red); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark); color: white;
+      padding: 4rem 5% 2rem;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3rem;
+    }
+    .footer-brand .tagline { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-top: 0.75rem; line-height: 1.7; max-width: 260px; }
+    .footer-social { display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      color: white; text-decoration: none; font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+    .social-btn:hover { background: var(--accent-green); }
+
+    .footer-col h5 {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      margin-bottom: 1rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-col ul li a {
+      text-decoration: none; color: rgba(255,255,255,0.6);
+      font-size: 0.85rem; transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: #81C784; }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0) rotate(2deg); }
+      50% { transform: translateY(-8px) rotate(-1deg); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding-top: 7rem; }
+      .hero-desc { max-width: 100%; }
+      .hero-actions { justify-content: center; }
+      .hero-sdgs { justify-content: center; }
+      .hero-visual { display: none; }
+      .mission-strip { flex-direction: column; gap: 1.5rem; }
+      .mission-divider { width: 60px; height: 2px; }
+      .beliefs-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .timeline-item { grid-template-columns: 100px 1fr; gap: 1rem; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; }
+      .timeline-date { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="10" r="6" fill="#1A1A1A"/>
+          <path d="M30 18 Q18 28 14 42" stroke="#D32F2F" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <path d="M30 18 Q42 28 46 42" stroke="#388E3C" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <path d="M22 16 Q30 22 38 16" stroke="#90CAF9" stroke-width="6" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span>Wise Up Foundation</span>
+        <span>...inspiring positive change</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="programs.html">Programs</a></li>
+      <!-- <li><a href="#">Impact</a></li> -->
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="getinvolved.html">Get Involved</a></li>
+      <li><a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" class="nav-cta">Donate</a></li>
+    </ul>
+    <div class="hamburger" onclick="this.classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge"><span></span> Youth-led NGO · Est. 2024</div>
+
+      <h1>
+        <span class="underline-red">Empowering</span><br/>
+        <em>Youth & Girls</em><br/>
+        for a Better World
+      </h1>
+
+      <p class="hero-desc">
+        Wise Up Foundation is a youth NGO dedicated to promoting quality education, gender equality, and economic empowerment in communities across Nigeria and beyond.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">
+          Our Programs
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#" class="btn-outline">Support Our Mission</a>
+      </div>
+
+      <div class="hero-sdgs">
+        <div class="sdg-pill sdg4">🎓 SDG 4 · Quality Education</div>
+        <div class="sdg-pill sdg8">💼 SDG 8 · Decent Work</div>
+        <div class="sdg-pill sdg10">⚖️ SDG 10 · Reduced Inequalities</div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="founded-badge">FOUNDED 2024</div>
+        <div class="stat-card main">
+          <p class="tagline">Making <em>positive change</em> one community at a time</p>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <div class="num">100<span>+</span></div>
+              <div class="label">Girls Empowered</div>
+            </div>
+            <div class="stat-item">
+              <div class="num">40<span>+</span></div>
+              <div class="label">Team Members</div>
+            </div>
+            <div class="stat-item">
+              <div class="num">20<span>+</span></div>
+              <div class="label">Volunteers</div>
+            </div>
+            <div class="stat-item">
+              <div class="num">4<span>+</span></div>
+              <div class="label">Programs Held</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card float1">
+          <div class="f-num">100<sup style="font-size:1rem">+</sup></div>
+          <div class="f-label">WhatsApp Community Members</div>
+        </div>
+        <div class="stat-card float2">
+          <div class="f-num">5</div>
+          <div class="f-label">Partner Organizations</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION STRIP -->
+  <div class="mission-strip">
+    <div class="label">OUR MISSION</div>
+    <div class="mission-divider"></div>
+    <div class="text">
+      Empowering individuals, promoting <em>education</em>, and advocating for a better future — one community at a time.
+    </div>
+  </div>
+
+  <!-- PROGRAMS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-tag">WHAT WE DO</div>
+      <h2>Programs That <em>Transform</em> Lives</h2>
+      <p class="section-sub">Our initiatives are designed to create lasting impact in education, gender equality, health, and economic empowerment.</p>
+    </div>
+    <div class="programs-grid">
+      <div class="program-card green">
+        <div class="prog-icon green">🎓</div>
+        <h3>Girl Child Empowerment</h3>
+        <p>Celebrating and empowering young girls, promoting gender equality, and giving them tools to reach their full potential.</p>
+      </div>
+      <div class="program-card red">
+        <div class="prog-icon red">❤️</div>
+        <h3>Health Awareness</h3>
+        <p>Raising awareness about key health issues, promoting healthy habits, and supporting health-related community initiatives.</p>
+      </div>
+      <div class="program-card blue">
+        <div class="prog-icon blue">🏠</div>
+        <h3>Orphanage Support</h3>
+        <p>Providing care, joy, and support to orphanages — bringing smiles to children and meeting their essential needs.</p>
+      </div>
+      <div class="program-card orange">
+        <div class="prog-icon orange">💼</div>
+        <h3>Career Development & Mentorship</h3>
+        <p>Career talks, creative workshops, and mentorship programs to empower young people to achieve their goals.</p>
+      </div>
+      <div class="program-card purple">
+        <div class="prog-icon purple">🤝</div>
+        <h3>Men's Empowerment</h3>
+        <p>Promoting positive masculinity and supporting men to become better versions of themselves in their communities.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT -->
+  <section class="impact-section">
+    <div style="position:relative;z-index:1">
+      <div class="section-tag">OUR IMPACT</div>
+      <h2 style="color:white">Numbers That <em>Matter</em></h2>
+      <p class="section-sub">Every initiative, every conversation, every outreach creates ripples of positive change.</p>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-num">200<sup>+</sup></div>
+          <div class="impact-label">Girls empowered on International Day of the Girl Child</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">40<sup>+</sup></div>
+          <div class="impact-label">Dedicated team members across Nigeria</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">100<sup>+</sup></div>
+          <div class="impact-label">WhatsApp community members engaged monthly</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-num">20<sup>+</sup></div>
+          <div class="impact-label">Active Volunteers</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INITIATIVES TIMELINE -->
+  <section class="initiatives-section">
+    <div class="section-header">
+      <div class="section-tag">RECENT INITIATIVES</div>
+      <h2>Our Journey of <em>Action</em></h2>
+      <p class="section-sub">From community outreach to advocacy, here's what we've accomplished so far.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">
+          <div class="month">Oct</div>
+          <div class="day">11</div>
+          <div class="year">2024</div>
+        </div>
+        <div class="timeline-body">
+          <h4>International Day of the Girl Child</h4>
+          <p>Partnered with Lite Art Foundation to empower girls with knowledge and resources at a local school. Provided sanitary pads and educational sessions to over 100 girls.</p>
+          <span class="partner">Partner: Lite Art Foundation</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">
+          <div class="month">Mar</div>
+          <div class="day">12</div>
+          <div class="year">2025</div>
+        </div>
+        <div class="timeline-body">
+          <h4>Empower 1.0 — Education Initiative</h4>
+          <p>Visited a primary school to promote the importance of education. Provided stationery materials, shared inspiring stories, and encouraged students to stay in school.</p>
+          <span class="partner">Wise Up Foundation</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">
+          <div class="month">Mar</div>
+          <div class="day">19</div>
+          <div class="year">2025</div>
+        </div>
+        <div class="timeline-body">
+          <h4>WhatsApp Community Launch</h4>
+          <p>Launched our thriving community of 100+ members, hosting monthly discussions on personal development, gender equality, and career growth.</p>
+          <span class="partner">Online Community</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">
+          <div class="month">Jun</div>
+          <div class="day">23–26</div>
+          <div class="year">2025</div>
+        </div>
+        <div class="timeline-body">
+          <h4>Anti-Substance Abuse Advocacy</h4>
+          <p>Collaborated with The Drug Free Project to advocate against substance abuse and promote healthy lifestyles, sharing resources to help individuals make informed choices.</p>
+          <span class="partner">Partner: The Drug Free Project</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BELIEFS -->
+  <section class="beliefs-section">
+    <div class="beliefs-grid">
+      <div class="beliefs-content">
+        <div class="section-tag">WHAT WE BELIEVE</div>
+        <h2>Equality for <em>All</em> — Women and Men</h2>
+        <p class="section-sub">We take a uniquely balanced approach to empowerment, recognizing that when both men and women are celebrated, communities thrive.</p>
+        <div class="belief-list">
+          <div class="belief-item">
+            <div class="belief-icon">✊</div>
+            <div>
+              <h4>Break Stereotypes</h4>
+              <p>Challenging traditional notions of masculinity and femininity for a more nuanced understanding of gender roles.</p>
+            </div>
+          </div>
+          <div class="belief-item">
+            <div class="belief-icon">🤝</div>
+            <div>
+              <h4>Promote Collaboration</h4>
+              <p>Encouraging men and women to work together, sharing strengths and perspectives to achieve greater impact.</p>
+            </div>
+          </div>
+          <div class="belief-item">
+            <div class="belief-icon">🌍</div>
+            <div>
+              <h4>Build Stronger Communities</h4>
+              <p>Fostering social responsibility where everyone feels valued and empowered to make a positive difference.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="beliefs-visual">
+        <div class="quote-mark">"</div>
+        <blockquote>By appreciating and celebrating <em>both men and women</em>, we create a more inclusive world where everyone can thrive.</blockquote>
+        <div class="attr">— Wise Up Foundation</div>
+        <div class="sdg-badges">
+          <div class="sdg-badge g"><span class="sdg-num">4</span><span class="sdg-name">Quality Education</span></div>
+          <div class="sdg-badge r"><span class="sdg-num">8</span><span class="sdg-name">Decent Work</span></div>
+          <div class="sdg-badge b"><span class="sdg-num">10</span><span class="sdg-name">Reduced Inequalities</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-tag">JOIN US</div>
+    <h2>Ready to <em>Inspire</em> Positive Change?</h2>
+    <p>Whether you donate, volunteer, or spread the word — every contribution helps us reach more lives and build stronger communities.</p>
+    <div class="cta-buttons">
+      <a href="https://docs.google.com/forms/d/1PIs7VnGYy3I1Cjxnjzc3cNsSBQQkJmt1UP1pdbkKMD4/viewform" class="btn-primary">Volunteer With Us</a>
+      <a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" class="btn-red">Donate Now ❤️</a>
+      <a href="mailto:teamwiseupfoundation@gmail.com" class="btn-outline">Partner With Us</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
+          <div style="background:rgba(255,255,255,0.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 60 60" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="30" cy="10" r="6" fill="white"/>
+              <path d="M30 18 Q18 28 14 42" stroke="#D32F2F" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <path d="M30 18 Q42 28 46 42" stroke="#388E3C" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <path d="M22 16 Q30 22 38 16" stroke="#90CAF9" stroke-width="6" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;">Wise Up Foundation</div>
+            <div style="font-size:0.65rem;color:rgba(255,255,255,0.3);">...inspiring positive change</div>
+          </div>
+        </div>
+        <p class="tagline">A student-led NGO dedicated to empowering individuals, promoting education, and advocating for a better world through SDGs 4, 8, and 10.</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/profile.php?id=100077629332820" class="social-btn">f</a>
+          <a href="https://t.me/wiseupmaster" class="social-btn">tg</a>
+          <a href="https://instagram.com/official_wise_up/" class="social-btn">ig</a>
+          <a href="https://tiktok.com/@wiseup7154" class="social-btn">tk</a>
+          <a href="https://twitter.com/wiseup794738" class="social-btn">tw</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Pages</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <!-- <li><a href="#">Impact</a></li> -->
+          <li><a href="gallery.html">Gallery</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Get Involved</h5>
+        <ul>
+          <li><a href="https://docs.google.com/forms/d/1PIs7VnGYy3I1Cjxnjzc3cNsSBQQkJmt1UP1pdbkKMD4/viewform">Volunteer</a></li>
+          <li><a href="mailto:teamwiseupfoundation@gmail.com">Partner With Us</a></li>
+          <li><a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform">Donate</a></li>
+          <li><a href="https://instagram.com/official_wise_up/">Join Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:teamwiseupfoundation@gmail.com">Contact Us</a></li>
+          <!-- <li><a href="#">Press & Media</a></li> -->
+          <!-- <li><a href="#">Sponsorship</a></li> -->
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Wise Up Foundation. All rights reserved.</p>
+      <p>Aligned with UN SDGs 4 · 8 · 10</p>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Animate elements on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.style.animation = 'fadeUp 0.6s ease both';
+          observer.unobserve(el.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.program-card, .impact-card, .timeline-item, .belief-item').forEach(el => {
+      el.style.opacity = '0';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — Wise Up Foundation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #D32F2F; --green: #388E3C; --blue: #90CAF9;
+      --dark: #1A1A1A; --light: #F5F9F5; --white: #FFFFFF;
+      --accent-green: #2E7D32; --gray: #6B7280; --border: #E5E7EB;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 5%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .logo-icon { width: 44px; height: 44px; background: var(--light); border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .logo-text span:first-child { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--dark); display: block; line-height: 1.1; }
+    .logo-text span:last-child { font-size: 0.62rem; color: var(--accent-green); letter-spacing: 0.06em; font-weight: 500; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--dark); font-size: 0.875rem; font-weight: 500; padding: 0.5rem 0.9rem; border-radius: 8px; transition: background 0.2s, color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { background: var(--light); color: var(--accent-green); }
+    .nav-cta { background: var(--accent-green) !important; color: var(--white) !important; padding: 0.5rem 1.2rem !important; border-radius: 8px; }
+    .nav-cta:hover { background: #1B5E20 !important; color: white !important; }
+    @media(max-width:600px){ .nav-links { display: none; } }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 9rem 5% 5rem;
+      background: linear-gradient(160deg, #1A1A1A 0%, #2A2A2A 55%, #1B3A1B 100%);
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before { content:''; position:absolute; top:-120px; right:-80px; width:450px; height:450px; border-radius:50%; background:radial-gradient(circle, rgba(56,142,60,0.18) 0%, transparent 65%); }
+    .page-hero::after { content:''; position:absolute; bottom:-80px; left:5%; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle, rgba(211,47,47,0.1) 0%, transparent 65%); }
+    .hero-inner { position:relative; z-index:1; max-width:680px; }
+    .breadcrumb { display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; color:rgba(255,255,255,0.4); margin-bottom:1.5rem; }
+    .breadcrumb a { color:rgba(255,255,255,0.4); text-decoration:none; }
+    .breadcrumb a:hover { color:#81C784; }
+    .page-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#81C784; display:block; margin-bottom:1rem; }
+    .page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,5vw,3.5rem); font-weight:900; color:white; line-height:1.15; margin-bottom:1.25rem; }
+    .page-hero h1 em { font-style:italic; color:#81C784; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,0.5); line-height:1.8; max-width:540px; }
+
+    /* LOGO PLACEHOLDER */
+    .logo-showcase {
+      padding: 5rem 5%;
+      background: var(--light);
+      display: flex; align-items: center; gap: 5rem;
+      flex-wrap: wrap;
+    }
+    .logo-placeholder-box {
+      width: 240px; height: 240px; flex-shrink: 0;
+      border: 2px dashed #CBD5E1;
+      border-radius: 24px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.75rem; color: #94A3B8; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: white;
+    }
+    .logo-placeholder-box:hover { border-color: var(--accent-green); background: #F0FDF4; color: var(--accent-green); }
+    .logo-placeholder-box svg { width: 40px; height: 40px; }
+    .logo-placeholder-box span { font-size: 0.8rem; font-weight: 600; text-align: center; line-height: 1.5; }
+    .logo-intro { flex: 1; min-width: 260px; }
+    .logo-intro .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .logo-intro h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.5rem); font-weight:900; line-height:1.2; margin-bottom:1rem; }
+    .logo-intro h2 em { font-style:normal; color:var(--accent-green); }
+    .logo-intro p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-bottom:1rem; }
+    .founded-pill { display:inline-flex; align-items:center; gap:0.4rem; background:var(--dark); color:white; font-size:0.75rem; font-weight:600; padding:0.4rem 1rem; border-radius:100px; }
+
+    /* MISSION VISION */
+    .mv-section { padding: 5rem 5%; }
+    .mv-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
+    .mv-card { border-radius:20px; padding:2rem; position:relative; overflow:hidden; }
+    .mv-card.mission { background:var(--dark); color:white; }
+    .mv-card.vision { background:#E8F5E9; }
+    .mv-card.tagline-card { background:linear-gradient(135deg,#2E7D32,#43A047); color:white; }
+    .mv-icon { font-size:2rem; margin-bottom:1.25rem; display:block; }
+    .mv-label { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.6rem; }
+    .mv-card.mission .mv-label { color:rgba(255,255,255,0.4); }
+    .mv-card.vision .mv-label { color:var(--accent-green); }
+    .mv-card.tagline-card .mv-label { color:rgba(255,255,255,0.6); }
+    .mv-card h3 { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; margin-bottom:0.75rem; line-height:1.3; }
+    .mv-card.mission h3 { color:white; }
+    .mv-card p { font-size:0.875rem; line-height:1.75; }
+    .mv-card.mission p { color:rgba(255,255,255,0.55); }
+    .mv-card.vision p { color:var(--gray); }
+    .mv-card.tagline-card p { color:rgba(255,255,255,0.8); }
+    .mv-card.tagline-card blockquote { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; line-height:1.3; color:white; margin-bottom:0.5rem; }
+
+    /* HISTORY */
+    .history-section { padding:5rem 5%; background:var(--light); }
+    .history-section .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .history-section h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.5rem); font-weight:900; line-height:1.2; margin-bottom:3rem; }
+    .history-section h2 em { font-style:normal; color:var(--accent-green); }
+    .history-timeline { display:grid; grid-template-columns:1fr 80px 1fr; gap:0; }
+    .hist-left { display:flex; flex-direction:column; gap:2.5rem; padding-right:2rem; }
+    .hist-right { display:flex; flex-direction:column; gap:2.5rem; padding-left:2rem; padding-top:5rem; }
+    .hist-spine { display:flex; flex-direction:column; align-items:center; gap:0; }
+    .spine-line { flex:1; width:2px; background:linear-gradient(180deg, var(--border) 0%, var(--accent-green) 50%, var(--border) 100%); }
+    .spine-dot { width:14px; height:14px; border-radius:50%; background:var(--accent-green); border:3px solid white; box-shadow:0 0 0 3px rgba(46,125,50,0.2); flex-shrink:0; }
+    .hist-item { background:white; border-radius:16px; padding:1.5rem; border:1px solid var(--border); }
+    .hist-item .year { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; color:var(--accent-green); line-height:1; margin-bottom:0.5rem; }
+    .hist-item h4 { font-weight:700; font-size:0.95rem; margin-bottom:0.4rem; }
+    .hist-item p { font-size:0.83rem; color:var(--gray); line-height:1.65; }
+
+    /* SDG SECTION */
+    .sdg-section { padding:5rem 5%; }
+    .sdg-section .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .sdg-section h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.5rem); font-weight:900; margin-bottom:0.75rem; }
+    .sdg-section h2 em { font-style:normal; color:var(--accent-green); }
+    .sdg-section > p { color:var(--gray); font-size:0.95rem; max-width:560px; line-height:1.75; margin-bottom:3rem; }
+    .sdg-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .sdg-card { border-radius:20px; padding:2rem; position:relative; overflow:hidden; }
+    .sdg-card::before { content:''; position:absolute; top:-40px; right:-40px; width:120px; height:120px; border-radius:50%; opacity:0.08; }
+    .sdg4 { background:#E8F5E9; border:1px solid #C8E6C9; }
+    .sdg4::before { background:var(--accent-green); }
+    .sdg8 { background:#FFEBEE; border:1px solid #FFCDD2; }
+    .sdg8::before { background:var(--red); }
+    .sdg10 { background:#E3F2FD; border:1px solid #BBDEFB; }
+    .sdg10::before { background:#1565C0; }
+    .sdg-num { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:900; line-height:1; display:block; margin-bottom:0.5rem; }
+    .sdg4 .sdg-num { color:#2E7D32; }
+    .sdg8 .sdg-num { color:#C62828; }
+    .sdg10 .sdg-num { color:#1565C0; }
+    .sdg-name { font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.75rem; display:block; }
+    .sdg4 .sdg-name { color:#2E7D32; }
+    .sdg8 .sdg-name { color:#C62828; }
+    .sdg10 .sdg-name { color:#1565C0; }
+    .sdg-card h3 { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; margin-bottom:0.5rem; }
+    .sdg-card p { font-size:0.83rem; color:var(--gray); line-height:1.65; }
+
+    /* OBJECTIVES */
+    .obj-section { padding:5rem 5%; background:var(--dark); }
+    .obj-section .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#81C784; display:block; margin-bottom:0.75rem; }
+    .obj-section h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.5rem); font-weight:900; color:white; margin-bottom:3rem; }
+    .obj-section h2 em { font-style:normal; color:#81C784; }
+    .obj-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; }
+    .obj-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:1.5rem; display:flex; gap:1rem; align-items:flex-start; transition:background 0.2s, transform 0.2s; }
+    .obj-card:hover { background:rgba(255,255,255,0.09); transform:translateY(-3px); }
+    .obj-num { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:rgba(255,255,255,0.1); flex-shrink:0; line-height:1; }
+    .obj-text h4 { font-weight:600; font-size:0.9rem; color:white; margin-bottom:0.35rem; }
+    .obj-text p { font-size:0.8rem; color:rgba(255,255,255,0.45); line-height:1.6; }
+
+    /* TEAM / ORG STRUCTURE */
+    .team-section { padding:5rem 5%; }
+    .team-section .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .team-section h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.5rem); font-weight:900; margin-bottom:0.75rem; }
+    .team-section h2 em { font-style:normal; color:var(--accent-green); }
+    .team-section > p { color:var(--gray); font-size:0.95rem; max-width:520px; line-height:1.75; margin-bottom:3rem; }
+    .org-chart { display:flex; flex-direction:column; gap:1.5rem; }
+    .org-level { display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; }
+    .org-level-label { font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray); text-align:center; margin-bottom:0.5rem; }
+    .role-card { background:white; border:1px solid var(--border); border-radius:14px; padding:1rem 1.25rem; text-align:center; min-width:150px; transition:box-shadow 0.2s, transform 0.2s; }
+    .role-card:hover { box-shadow:0 8px 24px rgba(0,0,0,0.08); transform:translateY(-3px); }
+    .role-card.top { background:var(--dark); color:white; border-color:var(--dark); }
+    .role-card.top .role-title { color:white; }
+    .role-card.top .role-sub { color:rgba(255,255,255,0.4); }
+    .role-card.green { background:#E8F5E9; border-color:#C8E6C9; }
+    .role-title { font-weight:700; font-size:0.85rem; display:block; margin-bottom:0.2rem; }
+    .role-sub { font-size:0.72rem; color:var(--gray); }
+    .org-connector { text-align:center; color:var(--border); font-size:1.5rem; line-height:1; }
+
+    /* EXPANSION */
+    .expand-section { padding:5rem 5%; background:linear-gradient(135deg,#E8F5E9 0%,#F1F8E9 50%,#E3F2FD 100%); }
+    .expand-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    .expand-content .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .expand-content h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.3rem); font-weight:900; margin-bottom:1rem; line-height:1.2; }
+    .expand-content h2 em { font-style:normal; color:var(--accent-green); }
+    .expand-content p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-bottom:1.5rem; }
+    .expand-list { display:flex; flex-direction:column; gap:1rem; }
+    .expand-item { display:flex; align-items:flex-start; gap:1rem; }
+    .expand-icon { width:36px; height:36px; border-radius:10px; background:var(--accent-green); color:white; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .expand-item h4 { font-weight:600; font-size:0.9rem; margin-bottom:0.2rem; }
+    .expand-item p { font-size:0.82rem; color:var(--gray); line-height:1.6; }
+    .chapters-visual { background:white; border-radius:24px; padding:2rem; box-shadow:0 8px 32px rgba(0,0,0,0.08); }
+    .chapters-visual h4 { font-family:'Playfair Display',serif; font-weight:700; font-size:1rem; margin-bottom:1.25rem; color:var(--dark); }
+    .chapter-list { display:flex; flex-direction:column; gap:0.75rem; }
+    .chapter-item { display:flex; align-items:center; gap:0.75rem; padding:0.75rem 1rem; border-radius:10px; background:var(--light); }
+    .chapter-dot { width:10px; height:10px; border-radius:50%; background:var(--accent-green); flex-shrink:0; }
+    .chapter-item span { font-size:0.85rem; font-weight:500; }
+    .chapter-item .uni { font-size:0.72rem; color:var(--gray); display:block; }
+
+    /* FOOTER */
+    footer { background:#111; color:white; padding:3rem 5% 1.5rem; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border-top:1px solid rgba(255,255,255,0.07); padding-top:1.5rem; }
+    .footer-bottom p { font-size:0.78rem; color:rgba(255,255,255,0.3); }
+    .footer-nav { display:flex; gap:1.5rem; }
+    .footer-nav a { font-size:0.78rem; color:rgba(255,255,255,0.3); text-decoration:none; transition:color 0.2s; }
+    .footer-nav a:hover { color:#81C784; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { opacity:0; }
+    .fade-in.visible { animation:fadeUp 0.55s ease both; }
+
+    @media(max-width:900px){
+      .mv-grid { grid-template-columns:1fr; }
+      .sdg-grid { grid-template-columns:1fr; }
+      .history-timeline { grid-template-columns:1fr; }
+      .hist-spine { display:none; }
+      .hist-right { padding-top:0; padding-left:0; }
+      .expand-inner { grid-template-columns:1fr; }
+      .logo-showcase { gap:2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 60 60" width="30" height="30" fill="none">
+        <circle cx="30" cy="10" r="6" fill="#1A1A1A"/>
+        <path d="M30 18 Q18 28 14 42" stroke="#D32F2F" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M30 18 Q42 28 46 42" stroke="#388E3C" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M22 16 Q30 22 38 16" stroke="#90CAF9" stroke-width="6" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span>Wise Up Foundation</span>
+      <span>...inspiring positive change</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="getinvolved.html">Get Involved</a></li>
+    <li><a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" class="nav-cta">Donate</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span style="color:rgba(255,255,255,0.7)">About Us</span></div>
+    <div class="page-tag">OUR STORY</div>
+    <h1>Born from <em>Passion</em>,<br/>Driven by Purpose</h1>
+    <p>What started as two students posting motivational quotes online in 2021 has grown into a Foundation with 40+ team members, a university chapter, and real impact across Nigerian communities.</p>
+  </div>
+</section>
+
+
+
+<!-- MISSION / VISION / TAGLINE -->
+<section class="mv-section">
+  <div class="mv-grid">
+    <div class="mv-card mission fade-in">
+      <span class="mv-icon">🎯</span>
+      <div class="mv-label">Our Mission</div>
+      <h3>Empowering Communities Through Action</h3>
+      <p>To empower individuals, promote education, and advocate for a better future — raising awareness about social issues, supporting vulnerable populations, and fostering career development and mentorship opportunities.</p>
+    </div>
+    <div class="mv-card vision fade-in">
+      <span class="mv-icon">🌍</span>
+      <div class="mv-label">Our Vision</div>
+      <h3>A World Aligned with the SDGs</h3>
+      <p>We envision a world where quality education is accessible to all, decent work opportunities are available to every young person, and inequalities are systematically reduced — for both women and men.</p>
+    </div>
+    <div class="mv-card tagline-card fade-in">
+      <span class="mv-icon">✨</span>
+      <div class="mv-label">Our Tagline</div>
+      <blockquote>...inspiring positive change</blockquote>
+      <p>Every initiative, every conversation, every program we run is anchored in this simple but powerful belief — that positive change starts with inspiration.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY TIMELINE -->
+<section class="history-section">
+  <span class="section-tag">OUR HISTORY</span>
+  <h2>From a Small <em>Online Initiative</em><br/>to an NGO</h2>
+  <div class="history-timeline">
+    <div class="hist-left">
+      <div class="hist-item fade-in">
+        <div class="year">2021</div>
+        <h4>The Beginning</h4>
+        <p>Wise Up was founded as a small online initiative by two students — posting inspirational and motivational quotes on Facebook and Telegram with a passion for making a positive impact.</p>
+      </div>
+      <div class="hist-item fade-in">
+        <div class="year">2023</div>
+        <h4>Growing Online Presence</h4>
+        <p>Expanded to Instagram, TikTok, Twitter, LinkedIn, and other platforms — building an engaged community of followers who resonated with our message of empowerment and positive change.</p>
+      </div>
+    </div>
+    <div class="hist-spine">
+      <div class="spine-line"></div>
+      <div class="spine-dot"></div>
+      <div class="spine-line"></div>
+      <div class="spine-dot"></div>
+      <div class="spine-line"></div>
+    </div>
+    <div class="hist-right">
+      <div class="hist-item fade-in">
+        <div class="year">2024</div>
+        <h4> Becoming an NGO</h4>
+        <p>Evolved into Wise Up Foundation  a non-governmental organization. The team grew from two to nine members and began running real on-ground programs and partnerships.</p>
+      </div>
+      <div class="hist-item fade-in">
+        <div class="year">2025–26</div>
+        <h4>Expanding Reach & Impact</h4>
+        <p>Team grew to 40+ members. Established a university chapter (LAUTECH). Launched WhatsApp community (100+ members), and delivered 7+ major programs across Nigeria.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SDG ALIGNMENT -->
+<section class="sdg-section">
+  <span class="section-tag">UN SUSTAINABLE DEVELOPMENT GOALS</span>
+  <h2>Our Work is Rooted in the <em>SDGs</em></h2>
+  <p>Everything we do is intentionally designed to contribute to three of the United Nations' Global Goals — because local action drives global change.</p>
+  <div class="sdg-grid">
+    <div class="sdg-card sdg4 fade-in">
+      <span class="sdg-num">4</span>
+      <span class="sdg-name">Quality Education</span>
+      <h3>Education as the Key to Opportunity</h3>
+      <p>We believe that education unlocks potential. Through school visits, stationery drives, and our Empower Young Minds program, we promote the importance of staying in school and pursuing knowledge.</p>
+    </div>
+    <div class="sdg-card sdg8 fade-in">
+      <span class="sdg-num">8</span>
+      <span class="sdg-name">Decent Work & Economic Growth</span>
+      <h3>Empowering Youth for the Economy</h3>
+      <p>Our Skill Acquisition Program and career mentorship initiatives give young people in-demand digital and creative skills — directly addressing youth unemployment and economic exclusion.</p>
+    </div>
+    <div class="sdg-card sdg10 fade-in">
+      <span class="sdg-num">10</span>
+      <span class="sdg-name">Reduced Inequalities</span>
+      <h3>Equity for All — Women and Men</h3>
+      <p>We take a balanced approach to empowerment, championing gender equality while also recognizing positive masculinity — creating a more inclusive society where everyone has access to opportunities.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTIVES -->
+<section class="obj-section">
+  <span class="section-tag">WHAT WE STAND FOR</span>
+  <h2>Our <em>Objectives</em></h2>
+  <div class="obj-grid">
+    <div class="obj-card fade-in">
+      <div class="obj-num">01</div>
+      <div class="obj-text"><h4>Raise Social Awareness</h4><p>Promote awareness about social issues and drive positive change in communities.</p></div>
+    </div>
+    <div class="obj-card fade-in">
+      <div class="obj-num">02</div>
+      <div class="obj-text"><h4>Empower Women & Girls</h4><p>Support women and girls to reach their full potential through education and resources.</p></div>
+    </div>
+    <div class="obj-card fade-in">
+      <div class="obj-num">03</div>
+      <div class="obj-text"><h4>Support Vulnerable Populations</h4><p>Provide care and support to orphans and marginalized communities.</p></div>
+    </div>
+    <div class="obj-card fade-in">
+      <div class="obj-num">04</div>
+      <div class="obj-text"><h4>Promote Gender Equality</h4><p>Champion both gender equality and positive masculinity for a balanced society.</p></div>
+    </div>
+    <div class="obj-card fade-in">
+      <div class="obj-num">05</div>
+      <div class="obj-text"><h4>Foster Career Development</h4><p>Offer career talks, workshops, and mentorship to empower young people professionally.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM / ORG STRUCTURE -->
+<section class="team-section">
+  <span class="section-tag">WHO WE ARE</span>
+  <h2>Our <em>Team Structure</em></h2>
+  <p>A lean, passionate team of students and young graduates professionals working together across various location to deliver real impact.</p>
+  <div class="org-chart">
+    <div>
+      <div class="org-level-label">Leadership</div>
+      <div class="org-level">
+        <div class="role-card top"><span class="role-title">Founder / President</span><span class="role-sub">Strategic guidance & oversight</span></div>
+        <div class="role-card top"><span class="role-title">Vice President</span><span class="role-sub">Decision-making support</span></div>
+        <div class="role-card top"><span class="role-title">Executive Director</span><span class="role-sub">Overall management & operations</span></div>
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+    <div>
+      <div class="org-level-label">Department Heads</div>
+      <div class="org-level">
+        <div class="role-card green"><span class="role-title">Community Manager</span><span class="role-sub">Engagement & outreach</span></div>
+        <div class="role-card green"><span class="role-title">HR & Project Manager</span><span class="role-sub">Human resources & operations</span></div>
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+    <div>
+      <div class="org-level-label">University Chapter Heads</div>
+      <div class="org-level">
+        <div class="role-card"><span class="role-title">LAUTECH Head</span><span class="role-sub">Ladoke Akintola University</span></div>
+        <!-- <div class="role-card"><span class="role-title">FUOYE Head</span><span class="role-sub">Federal University, Oye-Ekiti</span></div>
+        <div class="role-card"><span class="role-title">UNIOSUN Head</span><span class="role-sub">Osun State University</span></div> -->
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+    <div>
+      <div class="org-level-label">Team Leads & Support</div>
+      <div class="org-level">
+        <div class="role-card"><span class="role-title">Social Media Team</span><span class="role-sub">Content & platform management</span></div>
+        <div class="role-card"><span class="role-title">Content Creation Team</span><span class="role-sub">Developing platform content</span></div>
+        <div class="role-card"><span class="role-title">Project Management Team</span><span class="role-sub">Planning & evaluation</span></div>
+        <div class="role-card"><span class="role-title">Fundraising Team</span><span class="role-sub">Budget review & resource mobilization</span></div>
+      </div>
+    </div>
+    <div class="org-connector">↓</div>
+    <div>
+      <div class="org-level-label">Governance & Volunteers</div>
+      <div class="org-level">
+        <div class="role-card green"><span class="role-title">Synergy Squad</span><span class="role-sub">Decision-making body</span></div>
+        <div class="role-card green"><span class="role-title">Board Members</span><span class="role-sub">Strategic oversight & support</span></div>
+        <div class="role-card green"><span class="role-title">Volunteers</span><span class="role-sub">Essential program execution</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPANSION -->
+<section class="expand-section">
+  <div class="expand-inner">
+    <div class="expand-content">
+      <span class="section-tag">LOOKING AHEAD</span>
+      <h2>Our <em>Expansion</em> Plan</h2>
+      <p>We're growing — and we have a clear plan for how Wise Up Foundation will deepen its reach and impact across Nigeria and beyond.</p>
+      <div class="expand-list">
+        <div class="expand-item fade-in">
+          <div class="expand-icon">🏫</div>
+          <div><h4>More State Chapters</h4><p>Establishing Wise Up chapters in more Nigerian states, with a focus on universities and local communities.</p></div>
+        </div>
+        <div class="expand-item fade-in">
+          <div class="expand-icon">📋</div>
+          <div><h4>New Programs</h4><p>Developing targeted programs addressing specific regional needs — from digital skills to mental health awareness.</p></div>
+        </div>
+        <div class="expand-item fade-in">
+          <div class="expand-icon">🤝</div>
+          <div><h4>Strategic Partnerships</h4><p>Building relationships with organizations, universities, and individuals who share our vision for positive change.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="chapters-visual fade-in">
+      <h4>🏛 Active University Chapters</h4>
+      <div class="chapter-list">
+        <div class="chapter-item"><div class="chapter-dot"></div><div><span>LAUTECH</span><span class="uni">Ladoke Akintola University of Technology</span></div></div>
+        <!-- <div class="chapter-item"><div class="chapter-dot"></div><div><span>FUOYE</span><span class="uni">Federal University of Oye-Ekiti</span></div></div>
+        <div class="chapter-item"><div class="chapter-dot"></div><div><span>UNIOSUN</span><span class="uni">Osun State University</span></div></div> -->
+        <div class="chapter-item" style="background:#E8F5E9; border:1px dashed #A5D6A7;"><div class="chapter-dot" style="background:#A5D6A7;"></div><div><span style="color:var(--accent-green); font-size:0.82rem;">+ More chapters coming soon</span><span class="uni">Expanding across Nigeria</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025–2026 Wise Up Foundation · All rights reserved</p>
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <a href="get-involved.html">Get Involved</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

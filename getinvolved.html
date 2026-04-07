@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Involved — Wise Up Foundation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #D32F2F; --green: #388E3C; --dark: #1A1A1A;
+      --light: #F5F9F5; --white: #FFFFFF; --accent-green: #2E7D32;
+      --accent-red: #C62828; --gray: #6B7280; --border: #E5E7EB;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1rem 5%; background:rgba(255,255,255,0.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+    .nav-logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+    .logo-icon { width:44px; height:44px; background:var(--light); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+    .logo-text span:first-child { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--dark); display:block; line-height:1.1; }
+    .logo-text span:last-child { font-size:0.62rem; color:var(--accent-green); letter-spacing:0.06em; font-weight:500; display:block; }
+    .nav-links { display:flex; align-items:center; gap:0.25rem; list-style:none; }
+    .nav-links a { text-decoration:none; color:var(--dark); font-size:0.875rem; font-weight:500; padding:0.5rem 0.9rem; border-radius:8px; transition:background 0.2s, color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { background:var(--light); color:var(--accent-green); }
+    .nav-cta { background:var(--accent-green) !important; color:var(--white) !important; padding:0.5rem 1.2rem !important; border-radius:8px; }
+    .nav-cta:hover { background:#1B5E20 !important; color:white !important; }
+    @media(max-width:600px){ .nav-links { display:none; } }
+
+    /* PAGE HERO */
+    .page-hero { padding:9rem 5% 5rem; background:linear-gradient(160deg, #1A1A1A 0%, #2A2A2A 55%, #1B3A1B 100%); position:relative; overflow:hidden; }
+    .page-hero::before { content:''; position:absolute; top:-120px; right:-80px; width:450px; height:450px; border-radius:50%; background:radial-gradient(circle, rgba(56,142,60,0.18) 0%, transparent 65%); }
+    .page-hero::after { content:''; position:absolute; bottom:-80px; left:5%; width:250px; height:250px; border-radius:50%; background:radial-gradient(circle, rgba(211,47,47,0.1) 0%, transparent 65%); }
+    .hero-inner { position:relative; z-index:1; max-width:680px; }
+    .breadcrumb { display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; color:rgba(255,255,255,0.4); margin-bottom:1.5rem; }
+    .breadcrumb a { color:rgba(255,255,255,0.4); text-decoration:none; }
+    .breadcrumb a:hover { color:#81C784; }
+    .page-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#81C784; display:block; margin-bottom:1rem; }
+    .page-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,5vw,3.5rem); font-weight:900; color:white; line-height:1.15; margin-bottom:1.25rem; }
+    .page-hero h1 em { font-style:italic; color:#81C784; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,0.5); line-height:1.8; max-width:520px; }
+
+    /* WAY TO HELP */
+    .ways-section { padding:5rem 5%; }
+    .ways-section .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .ways-section h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.5rem); font-weight:900; margin-bottom:0.75rem; }
+    .ways-section h2 em { font-style:normal; color:var(--accent-green); }
+    .ways-section > p { color:var(--gray); font-size:0.95rem; max-width:520px; line-height:1.75; margin-bottom:3rem; }
+    .ways-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+    .way-card { border-radius:20px; padding:2rem; border:2px solid var(--border); transition:all 0.3s; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+    .way-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:20px 20px 0 0; transform:scaleX(0); transform-origin:left; transition:transform 0.3s; }
+    .way-card.volunteer::before { background:var(--accent-green); }
+    .way-card.donate::before { background:var(--red); }
+    .way-card.partner::before { background:#1565C0; }
+    .way-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(0,0,0,0.1); border-color:transparent; }
+    .way-card:hover::before { transform:scaleX(1); }
+    .way-icon { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; margin-bottom:1.5rem; }
+    .way-card.volunteer .way-icon { background:#E8F5E9; }
+    .way-card.donate .way-icon { background:#FFEBEE; }
+    .way-card.partner .way-icon { background:#E3F2FD; }
+    .way-card h3 { font-family:'Playfair Display',serif; font-size:1.25rem; font-weight:700; margin-bottom:0.6rem; }
+    .way-card p { font-size:0.875rem; color:var(--gray); line-height:1.7; flex:1; margin-bottom:1.75rem; }
+    .way-btn { display:inline-flex; align-items:center; gap:0.5rem; font-weight:700; font-size:0.875rem; text-decoration:none; padding:0.8rem 1.5rem; border-radius:12px; transition:all 0.2s; }
+    .way-card.volunteer .way-btn { background:var(--accent-green); color:white; box-shadow:0 4px 14px rgba(46,125,50,0.3); }
+    .way-card.volunteer .way-btn:hover { background:#1B5E20; transform:translateX(3px); }
+    .way-card.donate .way-btn { background:var(--red); color:white; box-shadow:0 4px 14px rgba(211,47,47,0.3); }
+    .way-card.donate .way-btn:hover { background:var(--accent-red); transform:translateX(3px); }
+    .way-card.partner .way-btn { background:#1565C0; color:white; box-shadow:0 4px 14px rgba(21,101,192,0.3); }
+    .way-card.partner .way-btn:hover { background:#0D47A1; transform:translateX(3px); }
+
+    /* VOLUNTEER DETAIL */
+    .volunteer-section { padding:5rem 5%; background:var(--light); }
+    .vol-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+    .vol-content .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .vol-content h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.2rem); font-weight:900; margin-bottom:1rem; line-height:1.2; }
+    .vol-content h2 em { font-style:normal; color:var(--accent-green); }
+    .vol-content p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-bottom:1.5rem; }
+    .vol-roles { display:flex; flex-direction:column; gap:0.75rem; margin-bottom:2rem; }
+    .vol-role { display:flex; align-items:center; gap:0.75rem; padding:0.85rem 1rem; background:white; border-radius:12px; border:1px solid var(--border); transition:box-shadow 0.2s; }
+    .vol-role:hover { box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+    .vol-role-icon { width:36px; height:36px; border-radius:10px; background:#E8F5E9; color:var(--accent-green); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .vol-role span { font-size:0.875rem; font-weight:500; }
+    .btn-vol { display:inline-flex; align-items:center; gap:0.6rem; background:var(--accent-green); color:white; text-decoration:none; font-weight:700; font-size:0.9rem; padding:0.9rem 1.8rem; border-radius:12px; transition:all 0.2s; box-shadow:0 4px 16px rgba(46,125,50,0.3); }
+    .btn-vol:hover { background:#1B5E20; transform:translateY(-2px); }
+    .vol-form-preview { background:white; border-radius:20px; padding:2rem; box-shadow:0 8px 32px rgba(0,0,0,0.08); border:1px solid var(--border); }
+    .form-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; padding-bottom:1.25rem; border-bottom:1px solid var(--border); }
+    .form-header-icon { width:40px; height:40px; border-radius:10px; background:#E8F5E9; color:var(--accent-green); display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .form-header-text h4 { font-weight:700; font-size:0.9rem; }
+    .form-header-text span { font-size:0.72rem; color:var(--gray); }
+    .mock-fields { display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.5rem; }
+    .mock-field { border-radius:8px; padding:0.75rem 1rem; border:1px solid var(--border); font-size:0.82rem; color:#94A3B8; background:var(--light); }
+    .form-note { font-size:0.72rem; color:var(--gray); text-align:center; margin-bottom:1.25rem; }
+    .form-note a { color:var(--accent-green); }
+    .btn-form { display:block; width:100%; text-align:center; background:var(--accent-green); color:white; text-decoration:none; font-weight:700; font-size:0.9rem; padding:0.9rem; border-radius:10px; transition:all 0.2s; }
+    .btn-form:hover { background:#1B5E20; }
+
+    /* DONATE SECTION */
+    .donate-section { padding:5rem 5%; background:var(--dark); position:relative; overflow:hidden; }
+    .donate-section::before { content:''; position:absolute; top:-100px; right:-100px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, rgba(211,47,47,0.12) 0%, transparent 65%); }
+    .donate-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; position:relative; z-index:1; }
+    .donate-content .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#EF9A9A; display:block; margin-bottom:0.75rem; }
+    .donate-content h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.2rem); font-weight:900; color:white; margin-bottom:1rem; line-height:1.2; }
+    .donate-content h2 em { font-style:italic; color:#EF9A9A; }
+    .donate-content p { color:rgba(255,255,255,0.5); font-size:0.95rem; line-height:1.8; margin-bottom:2rem; }
+    .impact-items { display:flex; flex-direction:column; gap:0.75rem; margin-bottom:2rem; }
+    .impact-item { display:flex; align-items:center; gap:0.75rem; }
+    .impact-dot { width:8px; height:8px; border-radius:50%; background:#EF9A9A; flex-shrink:0; }
+    .impact-item span { font-size:0.875rem; color:rgba(255,255,255,0.6); }
+    .btn-donate { display:inline-flex; align-items:center; gap:0.6rem; background:var(--red); color:white; text-decoration:none; font-weight:700; font-size:0.9rem; padding:0.9rem 1.8rem; border-radius:12px; transition:all 0.2s; box-shadow:0 4px 16px rgba(211,47,47,0.4); }
+    .btn-donate:hover { background:var(--accent-red); transform:translateY(-2px); }
+    .donate-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:2rem; }
+    .donate-card h4 { font-weight:700; color:white; font-size:0.9rem; margin-bottom:0.4rem; }
+    .donate-card p { font-size:0.82rem; color:rgba(255,255,255,0.4); margin-bottom:1.5rem; line-height:1.6; }
+    .donate-form-icon { font-size:2.5rem; margin-bottom:1rem; display:block; }
+    .btn-donate-form { display:block; width:100%; text-align:center; background:var(--red); color:white; text-decoration:none; font-weight:700; font-size:0.9rem; padding:0.9rem; border-radius:10px; transition:all 0.2s; margin-bottom:1rem; }
+    .btn-donate-form:hover { background:var(--accent-red); }
+    .secure-note { font-size:0.72rem; color:rgba(255,255,255,0.3); text-align:center; display:flex; align-items:center; justify-content:center; gap:0.4rem; }
+
+    /* COMMUNITY / WHATSAPP */
+    .community-section { padding:5rem 5%; background:var(--light); }
+    .comm-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    .comm-content .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .comm-content h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.2rem); font-weight:900; margin-bottom:1rem; line-height:1.2; }
+    .comm-content h2 em { font-style:normal; color:var(--accent-green); }
+    .comm-content p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-bottom:1.5rem; }
+    .btn-whatsapp { display:inline-flex; align-items:center; gap:0.6rem; background:#25D366; color:white; text-decoration:none; font-weight:700; font-size:0.9rem; padding:0.9rem 1.8rem; border-radius:12px; transition:all 0.2s; box-shadow:0 4px 16px rgba(37,211,102,0.3); }
+    .btn-whatsapp:hover { background:#128C7E; transform:translateY(-2px); }
+    .comm-visual { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .comm-stat { background:white; border-radius:16px; padding:1.5rem; text-align:center; border:1px solid var(--border); transition:transform 0.2s; }
+    .comm-stat:hover { transform:translateY(-4px); }
+    .comm-stat .cn { font-family:'Playfair Display',serif; font-size:2.5rem; font-weight:900; color:var(--dark); display:block; }
+    .comm-stat .cl { font-size:0.72rem; color:var(--gray); margin-top:4px; }
+
+    /* SOCIAL MEDIA */
+    .social-section { padding:5rem 5%; }
+    .social-section .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .social-section h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.2rem); font-weight:900; margin-bottom:0.75rem; }
+    .social-section h2 em { font-style:normal; color:var(--accent-green); }
+    .social-section > p { color:var(--gray); font-size:0.95rem; max-width:500px; line-height:1.75; margin-bottom:3rem; }
+    .socials-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
+    .social-card { display:flex; align-items:center; gap:1rem; padding:1.25rem 1.5rem; border-radius:16px; border:1px solid var(--border); text-decoration:none; color:var(--dark); transition:all 0.25s; }
+    .social-card:hover { transform:translateY(-4px); box-shadow:0 12px 32px rgba(0,0,0,0.1); border-color:transparent; color:var(--dark); }
+    .soc-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; transition:transform 0.2s; }
+    .social-card:hover .soc-icon { transform:scale(1.1); }
+    .soc-ig .soc-icon { background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .soc-x .soc-icon { background:#000; }
+    .soc-fb .soc-icon { background:#1877F2; }
+    .soc-tg .soc-icon { background:#2AABEE; }
+    .soc-tk .soc-icon { background:#010101; }
+    .soc-li .soc-icon { background:#0A66C2; }
+    .soc-info h4 { font-weight:700; font-size:0.875rem; margin-bottom:0.2rem; }
+    .soc-info span { font-size:0.75rem; color:var(--gray); }
+    .soc-arrow { margin-left:auto; color:var(--gray); font-size:0.8rem; transition:transform 0.2s, color 0.2s; }
+    .social-card:hover .soc-arrow { transform:translateX(3px); color:var(--accent-green); }
+
+    /* CONTACT / REACH OUT */
+    .contact-section { padding:5rem 5%; background:linear-gradient(135deg,#E8F5E9 0%,#F1F8E9 50%,#E3F2FD 100%); }
+    .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    .contact-content .section-tag { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-green); display:block; margin-bottom:0.75rem; }
+    .contact-content h2 { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.2rem); font-weight:900; margin-bottom:1rem; line-height:1.2; }
+    .contact-content h2 em { font-style:normal; color:var(--accent-green); }
+    .contact-content p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-bottom:2rem; }
+    .contact-links { display:flex; flex-direction:column; gap:1rem; }
+    .contact-link-item { display:flex; align-items:center; gap:1rem; padding:1rem 1.25rem; background:white; border-radius:12px; border:1px solid var(--border); text-decoration:none; color:var(--dark); transition:all 0.2s; }
+    .contact-link-item:hover { box-shadow:0 6px 20px rgba(0,0,0,0.08); transform:translateX(4px); }
+    .cli-icon { width:36px; height:36px; border-radius:10px; background:#E8F5E9; color:var(--accent-green); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+    .cli-text h5 { font-weight:600; font-size:0.875rem; margin-bottom:0.1rem; }
+    .cli-text span { font-size:0.72rem; color:var(--gray); }
+    .contact-quote { background:var(--dark); border-radius:24px; padding:2.5rem; color:white; }
+    .contact-quote blockquote { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; line-height:1.4; margin-bottom:1rem; }
+    .contact-quote blockquote em { font-style:italic; color:#81C784; }
+    .contact-quote .attr { font-size:0.78rem; color:rgba(255,255,255,0.35); }
+
+    footer { background:#111; color:white; padding:3rem 5% 1.5rem; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border-top:1px solid rgba(255,255,255,0.07); padding-top:1.5rem; }
+    .footer-bottom p { font-size:0.78rem; color:rgba(255,255,255,0.3); }
+    .footer-nav { display:flex; gap:1.5rem; }
+    .footer-nav a { font-size:0.78rem; color:rgba(255,255,255,0.3); text-decoration:none; transition:color 0.2s; }
+    .footer-nav a:hover { color:#81C784; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { opacity:0; }
+    .fade-in.visible { animation:fadeUp 0.55s ease both; }
+
+    @media(max-width:900px){
+      .ways-grid { grid-template-columns:1fr; }
+      .vol-inner, .donate-inner, .comm-inner, .contact-inner { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 60 60" width="30" height="30" fill="none">
+        <circle cx="30" cy="10" r="6" fill="#1A1A1A"/>
+        <path d="M30 18 Q18 28 14 42" stroke="#D32F2F" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M30 18 Q42 28 46 42" stroke="#388E3C" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M22 16 Q30 22 38 16" stroke="#90CAF9" stroke-width="6" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span>Wise Up Foundation</span>
+      <span>...inspiring positive change</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="get-involved.html" class="active">Get Involved</a></li>
+    <li><a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" class="nav-cta">Donate</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span style="color:rgba(255,255,255,0.7)">Get Involved</span></div>
+    <div class="page-tag">JOIN THE MOVEMENT</div>
+    <h1>Your Support <em>Changes</em><br/>Everything</h1>
+    <p>Whether you volunteer your time, donate to our cause, follow us on social media, or join our community — every single action helps us reach more lives and create lasting impact.</p>
+  </div>
+</section>
+
+<!-- THREE WAYS -->
+<section class="ways-section">
+  <span class="section-tag">HOW YOU CAN HELP</span>
+  <h2>Three Ways to Make a <em>Difference</em></h2>
+  <p>Pick what feels right for you — every form of support moves our mission forward.</p>
+  <div class="ways-grid">
+    <div class="way-card volunteer fade-in">
+      <div class="way-icon">🙋🏾</div>
+      <h3>Volunteer</h3>
+      <p>Join our team of passionate change-makers. Help us plan and execute programs, manage social media, create content, or assist in community outreach. No experience needed — just heart.</p>
+      <a href="https://docs.google.com/forms/d/1PIs7VnGYy3I1Cjxnjzc3cNsSBQQkJmt1UP1pdbkKMD4/viewform" target="_blank" rel="noopener" class="way-btn">Volunteer Now →</a>
+    </div>
+    <div class="way-card donate fade-in" id="donate">
+      <div class="way-icon">❤️</div>
+      <h3>Donate</h3>
+      <p>Your donation — no matter how small — directly funds our programs. From stationery for schoolchildren to resources for girl child empowerment, every contribution creates real impact.</p>
+      <a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" target="_blank" rel="noopener" class="way-btn">Donate Now →</a>
+    </div>
+    <div class="way-card partner fade-in">
+      <div class="way-icon">🤝</div>
+      <h3>Partner With Us</h3>
+      <p>Organizations, schools, and individuals — we love building partnerships. If you share our values around education, equality, and youth empowerment, let's collaborate on something great.</p>
+      <a href="mailto:teamwiseupfoundation@gmail.com" class="way-btn">Get In Touch →</a>
+    </div>
+  </div>
+</section>
+
+<!-- VOLUNTEER DETAIL -->
+<section class="volunteer-section" id="volunteer">
+  <div class="vol-inner">
+    <div class="vol-content fade-in">
+      <span class="section-tag">VOLUNTEER WITH US</span>
+      <h2>Be Part of the <em>Team</em></h2>
+      <p>We're a student-led NGO powered by passionate volunteers. When you volunteer with Wise Up Foundation, you're not just helping others — you're developing your own leadership, communication, and project management skills.</p>
+      <div class="vol-roles">
+        <div class="vol-role"><div class="vol-role-icon">📱</div><span>Social Media & Content Creation</span></div>
+        <div class="vol-role"><div class="vol-role-icon">📋</div><span>Project Planning & Management</span></div>
+        <div class="vol-role"><div class="vol-role-icon">🎤</div><span>Community Outreach & Engagement</span></div>
+        <div class="vol-role"><div class="vol-role-icon">💰</div><span>Fundraising & Resource Mobilization</span></div>
+        <div class="vol-role"><div class="vol-role-icon">🎓</div><span>Mentorship & Career Development</span></div>
+      </div>
+      <a href="https://docs.google.com/forms/d/1PIs7VnGYy3I1Cjxnjzc3cNsSBQQkJmt1UP1pdbkKMD4/viewform" target="_blank" rel="noopener" class="btn-vol">
+        Fill Volunteer Form
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+    <div class="vol-form-preview fade-in">
+      <div class="form-header">
+        <div class="form-header-icon">📝</div>
+        <div class="form-header-text"><h4>Volunteer Application Form</h4><span>Powered by Google Forms</span></div>
+      </div>
+      <div class="mock-fields">
+        <div class="mock-field">Full Name *</div>
+        <div class="mock-field">Email Address *</div>
+        <div class="mock-field">Phone Number *</div>
+        <div class="mock-field">University / Institution</div>
+        <div class="mock-field">Area of Interest *</div>
+      </div>
+      <p class="form-note">Clicking the button below opens the full form in Google Forms.</p>
+      <a href="https://docs.google.com/forms/d/1PIs7VnGYy3I1Cjxnjzc3cNsSBQQkJmt1UP1pdbkKMD4/viewform" target="_blank" rel="noopener" class="btn-form">Open Volunteer Form →</a>
+    </div>
+  </div>
+</section>
+
+<!-- DONATE DETAIL -->
+<section class="donate-section">
+  <div class="donate-inner">
+    <div class="donate-content fade-in">
+      <span class="section-tag">MAKE A DONATION</span>
+      <h2>Every Naira <em>Matters</em></h2>
+      <p>As a young NGO, every donation directly funds our programs — helping us reach more schools, support more children, and deliver more impactful initiatives across Nigeria.</p>
+      <div class="impact-items">
+        <div class="impact-item"><div class="impact-dot"></div><span>Stationery materials for primary school students</span></div>
+        <div class="impact-item"><div class="impact-dot"></div><span>Sanitary pads and hygiene resources for girls</span></div>
+        <div class="impact-item"><div class="impact-dot"></div><span>Skill training equipment and materials</span></div>
+        <div class="impact-item"><div class="impact-dot"></div><span>Transport and logistics for community outreach</span></div>
+        <div class="impact-item"><div class="impact-dot"></div><span>Gifts and support for orphanages</span></div>
+      </div>
+      <a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" target="_blank" rel="noopener" class="btn-donate">
+        Donate Now ❤️
+      </a>
+    </div>
+    <div class="donate-card fade-in">
+      <span class="donate-form-icon">💝</span>
+      <h4>Donation Form</h4>
+      <p>We use Google Forms to collect donation information. Your generosity goes directly to funding our community programs and initiatives.</p>
+      <a href="https://docs.google.com/forms/d/1Y4MzUUYpuF9YrvqdWi1KGuNdtZEv9YrH-7C5IX-86Yw/viewform" target="_blank" rel="noopener" class="btn-donate-form">Open Donation Form →</a>
+      <div class="secure-note">🔒 Secured by Google Forms</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHATSAPP COMMUNITY -->
+<section class="community-section">
+  <div class="comm-inner">
+    <div class="comm-content fade-in">
+      <span class="section-tag">JOIN OUR COMMUNITY</span>
+      <h2>Join the Wise Up <em>WhatsApp Community</em></h2>
+      <p>Be part of our growing community of 100+ members — young people, professionals, and change-makers engaging in meaningful conversations about personal development, gender equality, career growth, and social issues every month.</p>
+      <p>Our WhatsApp community features guest speakers, interactive discussions, and a supportive space to learn and grow with like-minded individuals.</p>
+      <a href="https://t.me/wiseupmaster" target="_blank" rel="noopener" class="btn-whatsapp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Join on Telegram
+      </a>
+    </div>
+    <div class="comm-visual fade-in">
+      <div class="comm-stat"><span class="cn">100+</span><span class="cl">Active Members</span></div>
+      <div class="comm-stat"><span class="cn">12+</span><span class="cl">Monthly Discussions</span></div>
+      <div class="comm-stat"><span class="cn">4+</span><span class="cl">Topics Each Month</span></div>
+      <div class="comm-stat"><span class="cn">2025</span><span class="cl">Year Launched</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL MEDIA -->
+<section class="social-section">
+  <span class="section-tag">FOLLOW US</span>
+  <h2>Stay Connected on <em>Social Media</em></h2>
+  <p>Follow our journey, share our content, and help spread the message of positive change to your network. Every share makes a difference.</p>
+  <div class="socials-grid">
+    <a href="https://instagram.com/official_wise_up/" target="_blank" rel="noopener" class="social-card soc-ig fade-in">
+      <div class="soc-icon" style="color:white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </div>
+      <div class="soc-info"><h4>Instagram</h4><span>@official_wise_up</span></div>
+      <span class="soc-arrow">→</span>
+    </a>
+    <a href="https://twitter.com/wiseup794738" target="_blank" rel="noopener" class="social-card soc-x fade-in">
+      <div class="soc-icon" style="color:white">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <div class="soc-info"><h4>X (Twitter)</h4><span>@wiseup794738</span></div>
+      <span class="soc-arrow">→</span>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=100077629332820" target="_blank" rel="noopener" class="social-card soc-fb fade-in">
+      <div class="soc-icon" style="color:white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </div>
+      <div class="soc-info"><h4>Facebook</h4><span>Wise Up Foundation</span></div>
+      <span class="soc-arrow">→</span>
+    </a>
+    <a href="https://t.me/wiseupmaster" target="_blank" rel="noopener" class="social-card soc-tg fade-in">
+      <div class="soc-icon" style="color:white">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </div>
+      <div class="soc-info"><h4>Telegram</h4><span>@wiseupmaster</span></div>
+      <span class="soc-arrow">→</span>
+    </a>
+    <a href="https://tiktok.com/@wiseup7154" target="_blank" rel="noopener" class="social-card soc-tk fade-in">
+      <div class="soc-icon" style="color:white">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+      </div>
+      <div class="soc-info"><h4>TikTok</h4><span>@wiseup7154</span></div>
+      <span class="soc-arrow">→</span>
+    </a>
+    <a href="https://www.linkedin.com/company/wise-up-foundation/" target="_blank" rel="noopener" class="social-card soc-li fade-in">
+      <div class="soc-icon" style="color:white">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </div>
+      <div class="soc-info"><h4>LinkedIn</h4><span>Wise Up Foundation</span></div>
+      <span class="soc-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section">
+  <div class="contact-inner">
+    <div class="contact-content fade-in">
+      <span class="section-tag">REACH OUT</span>
+      <h2>Have a <em>Question</em>?<br/>We'd Love to Hear You</h2>
+      <p>Whether it's about partnerships, sponsorships, media inquiries, or just wanting to learn more about what we do — reach out to us through any of these channels.</p>
+      <div class="contact-links">
+        <a href="https://instagram.com/official_wise_up/" target="_blank" class="contact-link-item"><div class="cli-icon">📸</div><div class="cli-text"><h5>Instagram DM</h5><span>@official_wise_up</span></div></a>
+        <a href="https://t.me/wiseupmaster" target="_blank" class="contact-link-item"><div class="cli-icon">✈️</div><div class="cli-text"><h5>Telegram</h5><span>@wiseupmaster</span></div></a>
+        <a href="https://www.facebook.com/profile.php?id=100077629332820" target="_blank" class="contact-link-item"><div class="cli-icon">💬</div><div class="cli-text"><h5>Facebook Messenger</h5><span>Wise Up Foundation</span></div></a>
+      </div>
+    </div>
+    <div class="contact-quote fade-in">
+      <blockquote>"Every small contribution counts, and <em>collective efforts</em> can lead to significant positive change."</blockquote>
+      <div class="attr">— Wise Up Foundation</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025–2026 Wise Up Foundation · All rights reserved</p>
+    <p>Contact us:+2349032435821</p>
+    <p>Email us:teamwiseupfoundation@gmail.com</p>
+
+
+    <nav class="footer-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <a href="getinvolved.html">Get Involved</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => {
+      if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'), i*80); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
